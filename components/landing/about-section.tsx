@@ -1,0 +1,259 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight } from "lucide-react";
+
+const teamMembers = [
+  {
+    name: "Alex Novak",
+    role: "CEO & Co-founder",
+    bio: "Previously led AI products at Google. 15 years in voice technology and NLP.",
+    initials: "AN",
+  },
+  {
+    name: "Elena Marchetti",
+    role: "Head of AI Research",
+    bio: "PhD in Computational Linguistics from MIT. Published 30+ papers on conversational AI.",
+    initials: "EM",
+  },
+  {
+    name: "Marcus Chen",
+    role: "VP of Engineering",
+    bio: "Former principal engineer at AWS. Built systems handling 10M+ concurrent connections.",
+    initials: "MC",
+  },
+  {
+    name: "Sarah Kim",
+    role: "Head of Product",
+    bio: "Ex-Stripe product lead. Obsessed with making complex technology feel simple.",
+    initials: "SK",
+  },
+  {
+    name: "David Okafor",
+    role: "Head of Trust & Safety",
+    bio: "Former trust lead at OpenAI. Specializes in responsible AI deployment at scale.",
+    initials: "DO",
+  },
+  {
+    name: "Aisha Patel",
+    role: "Solutions Architect",
+    bio: "10+ years building enterprise integrations. Connects VoiceLabs to everything.",
+    initials: "AP",
+  },
+];
+
+const milestones = [
+  { year: "2022", event: "Founded in San Francisco with a mission to make voice AI accessible" },
+  { year: "2023", event: "Launched v1.0 — first no-code AI voice agent platform" },
+  { year: "2023", event: "Raised $12M Series A led by Sequoia Capital" },
+  { year: "2024", event: "Reached 10,000+ enterprise deployments worldwide" },
+  { year: "2024", event: "Opened European office in London" },
+  { year: "2025", event: "Processing 50M+ voice interactions per month" },
+];
+
+const values = [
+  {
+    title: "Human-centered AI",
+    description: "We build AI that augments people, not replaces them. Every feature starts with the question: does this make someone's work better?",
+  },
+  {
+    title: "Radical transparency",
+    description: "Our agents always identify as AI. Our pricing has no hidden fees. Our roadmap is public. Trust is earned through honesty.",
+  },
+  {
+    title: "Ship and iterate",
+    description: "We'd rather put something real in your hands today than promise perfection tomorrow. Feedback loops beat planning cycles.",
+  },
+  {
+    title: "Enterprise without the friction",
+    description: "Security, compliance, and scale shouldn't require a 6-month procurement process. We make enterprise-grade feel startup-fast.",
+  },
+];
+
+export function AboutSection() {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
+      { threshold: 0.05 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section ref={sectionRef} className="relative py-24 lg:py-32">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+
+        {/* Hero Header */}
+        <div
+          className={`mb-24 transition-all duration-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-px bg-foreground" />
+            <span className="text-sm font-mono text-muted-foreground tracking-wider uppercase">
+              About Us
+            </span>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-24">
+            <h2 className="text-4xl lg:text-6xl font-display tracking-tight leading-[0.95]">
+              We&apos;re building the
+              <br />
+              <span className="text-stroke">voice layer</span>
+              <br />
+              for AI
+            </h2>
+            <div className="flex flex-col justify-end">
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
+                VoiceLabs started with a simple observation: businesses spend billions on phone calls,
+                but the technology behind them hasn&apos;t changed in decades. We&apos;re fixing that with
+                AI agents that actually understand, respond, and act — in real time.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Mission Statement */}
+        <div
+          className={`mb-32 py-20 border-y border-foreground/10 transition-all duration-1000 delay-200 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <p className="text-3xl lg:text-5xl font-display leading-snug max-w-4xl">
+            &ldquo;Every business deserves an AI team member that never sleeps,
+            never forgets, and always puts the customer first.&rdquo;
+          </p>
+          <div className="mt-8 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-sm font-medium">
+              AN
+            </div>
+            <div>
+              <p className="text-sm font-medium">Alex Novak</p>
+              <p className="text-xs text-muted-foreground">CEO & Co-founder</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Values */}
+        <div className="mb-32">
+          <div
+            className={`mb-12 transition-all duration-1000 delay-100 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase block mb-4">
+              Our Values
+            </span>
+            <h3 className="text-3xl lg:text-4xl font-display">What drives us</h3>
+          </div>
+          <div className="grid md:grid-cols-2 gap-px bg-foreground/10">
+            {values.map((value, i) => (
+              <div
+                key={value.title}
+                className={`bg-background p-8 lg:p-12 transition-all duration-700 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+                style={{ transitionDelay: `${300 + i * 100}ms` }}
+              >
+                <span className="font-mono text-xs text-muted-foreground">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h4 className="text-xl font-display mt-3 mb-3">{value.title}</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {value.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Timeline */}
+        <div className="mb-32">
+          <div
+            className={`mb-12 transition-all duration-1000 delay-100 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase block mb-4">
+              Our Journey
+            </span>
+            <h3 className="text-3xl lg:text-4xl font-display">Milestones</h3>
+          </div>
+          <div className="space-y-0">
+            {milestones.map((milestone, i) => (
+              <div
+                key={`${milestone.year}-${i}`}
+                className={`flex gap-8 py-6 border-b border-foreground/10 transition-all duration-700 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
+                style={{ transitionDelay: `${400 + i * 80}ms` }}
+              >
+                <span className="font-mono text-sm text-muted-foreground w-16 shrink-0 pt-0.5">
+                  {milestone.year}
+                </span>
+                <p className="text-base lg:text-lg">{milestone.event}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Team */}
+        <div className="mb-20">
+          <div
+            className={`mb-12 transition-all duration-1000 delay-100 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase block mb-4">
+              The Team
+            </span>
+            <h3 className="text-3xl lg:text-4xl font-display">Meet the people behind VoiceLabs</h3>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {teamMembers.map((member, i) => (
+              <div
+                key={member.name}
+                className={`group border border-foreground/10 rounded-2xl p-8 hover:border-foreground/30 transition-all duration-700 hover:bg-foreground/[0.02] ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+                style={{ transitionDelay: `${500 + i * 80}ms` }}
+              >
+                <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center text-base font-medium mb-5">
+                  {member.initials}
+                </div>
+                <h4 className="text-lg font-medium mb-1">{member.name}</h4>
+                <p className="text-sm text-muted-foreground mb-3">{member.role}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{member.bio}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div
+          className={`text-center py-20 border-t border-foreground/10 transition-all duration-1000 delay-300 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <h3 className="text-3xl lg:text-4xl font-display mb-4">Want to join us?</h3>
+          <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+            We&apos;re always looking for talented people who want to shape the future of voice AI.
+          </p>
+          <a
+            href="/contact"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors group"
+          >
+            Get in touch
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
