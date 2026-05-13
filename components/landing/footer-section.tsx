@@ -1,94 +1,75 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
-import { AnimatedWave } from "./animated-wave";
+import { ArrowRight } from "lucide-react";
 
 const footerLinks = {
-  Product: [
-    { name: "Features", href: "#features" },
-    { name: "Use Cases", href: "#developers" },
-    { name: "Industries", href: "/industries" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Integrations", href: "#integrations" },
+  "Use Cases": [
+    { name: "Sales", href: "#developers" },
+    { name: "Customer Support", href: "#developers" },
+    { name: "Appointment Booking", href: "#developers" },
+    { name: "E-commerce", href: "#developers" },
+    { name: "HoReCa", href: "#developers" },
   ],
   Company: [
-    { name: "About", href: "/about" },
     { name: "Blog", href: "/blog" },
-    { name: "Contact", href: "/contact" },
-  ],
-  Legal: [
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Terms of Service", href: "/terms" },
-    { name: "GDPR", href: "/gdpr" },
-    { name: "Cookies", href: "/cookies" },
+    { name: "Careers", href: "/careers" },
+    { name: "Contact Us", href: "/contact" },
+    { name: "About VoiceLabs", href: "/about" },
   ],
 };
 
 const socialLinks = [
-  { name: "Twitter", href: "#" },
-  { name: "GitHub", href: "#" },
-  { name: "LinkedIn", href: "#" },
-  { name: "Facebook", href: "#" },
-  { name: "Instagram", href: "#" },
-  { name: "TikTok", href: "#" },
+  { name: "Instagram", href: "#", icon: "IG" },
+  { name: "X", href: "#", icon: "𝕏" },
+  { name: "LinkedIn", href: "#", icon: "in" },
 ];
 
 export function FooterSection() {
   return (
-    <footer className="relative border-t border-foreground/10">
-      {/* Animated wave background */}
-      <div className="absolute inset-0 h-64 opacity-20 pointer-events-none overflow-hidden">
-        <AnimatedWave />
+    <footer className="relative">
+      {/* CTA Banner */}
+      <div className="bg-gradient-to-b from-white to-[#f5f0ff]">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-16 lg:py-24">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-display tracking-tight text-gray-900 max-w-xl">
+              <span className="text-[#7c3aed]">Ready to outperform</span> your best caller
+              and every other voice AI vendor?
+            </h2>
+            <a
+              href="/demo"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-sm font-medium rounded-full transition-colors group shrink-0 self-start md:self-center"
+            >
+              Book a Demo
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+            </a>
+          </div>
+        </div>
       </div>
-      
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
-        {/* Main Footer */}
-        <div className="py-16 lg:py-24">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-12 lg:gap-8">
-            {/* Brand Column */}
-            <div className="col-span-1 md:col-span-2">
-              <a href="#" className="inline-flex items-center gap-2 mb-6">
-                <span className="text-2xl font-display">VoiceLabs</span>
-                <span className="text-xs text-muted-foreground font-mono">AI</span>
+
+      {/* Main Footer */}
+      <div className="bg-[#faf8ff]">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-12 lg:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10 lg:gap-16">
+            {/* Brand */}
+            <div className="md:col-span-1 lg:col-span-2">
+              <a href="/" className="inline-flex items-center gap-1.5 mb-6">
+                <span className="text-xl font-display tracking-tight text-gray-900">VoiceLabs</span>
+                <span className="text-[10px] text-gray-400 font-mono mt-0.5">AI</span>
               </a>
-
-              <p className="text-muted-foreground leading-relaxed mb-8 max-w-xs">
-                AI Voice Calling Agents platform. Automate calls, qualify leads, 
-                and boost customer satisfaction — 24/7.
-              </p>
-
-              {/* Social Links */}
-              <div className="grid grid-cols-3 gap-x-6 gap-y-3 max-w-xs">
-                {socialLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 group"
-                  >
-                    {link.name}
-                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  </a>
-                ))}
-              </div>
             </div>
 
-            {/* Link Columns */}
+            {/* Link columns */}
             {Object.entries(footerLinks).map(([title, links]) => (
               <div key={title}>
-                <h3 className="text-sm font-medium mb-6">{title}</h3>
-                <ul className="space-y-4">
+                <h3 className="text-sm font-semibold text-gray-900 mb-4">{title}</h3>
+                <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.name}>
                       <a
                         href={link.href}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
+                        className="text-sm text-gray-500 hover:text-[#7c3aed] transition-colors"
                       >
                         {link.name}
-                        {"badge" in link && link.badge && (
-                          <span className="text-xs px-2 py-0.5 bg-foreground text-background rounded-full">
-                            {link.badge}
-                          </span>
-                        )}
                       </a>
                     </li>
                   ))}
@@ -96,13 +77,55 @@ export function FooterSection() {
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Bottom Bar */}
-        <div className="py-8 border-t border-foreground/10 flex justify-center">
-          <p className="text-sm text-muted-foreground text-center">
-            2025 VoiceLabs AI. All rights reserved.
-          </p>
+          {/* Bottom section */}
+          <div className="mt-12 pt-8 border-t border-gray-200">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              {/* Contact info */}
+              <div>
+                <p className="text-sm text-gray-600 mb-1">hello@voicelabs.ai</p>
+                <p className="text-xs text-gray-400">
+                  VoiceLabs AI · San Francisco, CA
+                </p>
+              </div>
+
+              {/* Social links */}
+              <div className="flex items-center gap-3">
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:border-[#7c3aed] hover:text-[#7c3aed] transition-colors text-xs font-medium"
+                    aria-label={link.name}
+                  >
+                    {link.icon}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Copyright bar */}
+      <div className="bg-[#faf8ff] border-t border-gray-100">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p className="text-xs text-gray-400">© 2025 — VoiceLabs AI. All rights reserved.</p>
+            <div className="flex items-center gap-4">
+              <a href="/privacy" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                Privacy Policy
+              </a>
+              <span className="text-gray-200">·</span>
+              <a href="/terms" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                Terms & Conditions
+              </a>
+              <span className="text-gray-200">·</span>
+              <a href="/gdpr" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                Data Security & Compliance
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
