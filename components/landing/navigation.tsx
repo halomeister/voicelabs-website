@@ -72,14 +72,16 @@ export function Navigation() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="#" className={`text-foreground/70 hover:text-foreground transition-all duration-500 ${isScrolled ? "text-xs" : "text-sm"}`}>
+            <a href="#" className={`text-foreground/70 hover:text-foreground transition-all duration-500 relative z-10 ${isScrolled ? "text-xs" : "text-sm"}`}>
               Log in
+              <span className="absolute -top-2 -right-8 z-50 px-1.5 py-0.5 bg-white text-black text-[9px] font-mono rounded-full leading-none border border-foreground/10">soon</span>
             </a>
             <Button
               size="sm"
-              className={`bg-foreground hover:bg-foreground/90 text-background rounded-full transition-all duration-500 ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
+              className={`bg-foreground hover:bg-foreground/90 text-background rounded-full transition-all duration-500 relative ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
             >
               Sign up
+              <span className="absolute -top-1.5 -right-1.5 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
             </Button>
           </div>
 

@@ -36,7 +36,15 @@ export function CookieBanner() {
     setIsVisible(false);
   };
 
-  if (!isVisible) return null;
+  if (!isVisible) return (
+    <button
+      onClick={() => setIsVisible(true)}
+      aria-label="Cookie preferences"
+      className="fixed bottom-8 left-8 z-50 w-10 h-10 rounded-full bg-background border border-foreground/10 shadow-lg flex items-center justify-center hover:scale-110 transition-transform"
+    >
+      <Cookie className="w-4 h-4 text-muted-foreground" />
+    </button>
+  );
 
   return (
     <div

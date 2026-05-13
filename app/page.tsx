@@ -15,6 +15,7 @@ import { CtaSection } from "@/components/landing/cta-section";
 import { FooterSection } from "@/components/landing/footer-section";
 import { VoiceChatWidget } from "@/components/landing/voice-chat-widget";
 import { CookieBanner } from "@/components/landing/cookie-banner";
+import { BackToTop } from "@/components/landing/back-to-top";
 
 export default function Home() {
   return (
@@ -36,6 +37,7 @@ export default function Home() {
       <FooterSection />
       <VoiceChatWidget />
       <CookieBanner />
+      <BackToTop />
     </main>
   );
 }
