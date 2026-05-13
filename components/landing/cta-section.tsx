@@ -10,6 +10,8 @@ export function CtaSection() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,10 +33,33 @@ export function CtaSection() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
+    if (!email.trim()) return;
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Something went wrong");
+      }
+
       setIsSubmitted(true);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,17 +114,22 @@ export function CtaSection() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           required
-                          className="w-full h-14 pl-12 pr-4 bg-transparent border border-foreground/20 rounded-full text-base placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground/50 transition-colors"
+                          disabled={isLoading}
+                          className="w-full h-14 pl-12 pr-4 bg-transparent border border-foreground/20 rounded-full text-base placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground/50 transition-colors disabled:opacity-50"
                         />
                       </div>
                       <button
                         type="submit"
-                        className="h-14 px-8 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors inline-flex items-center justify-center gap-2 group whitespace-nowrap"
+                        disabled={isLoading}
+                        className="h-14 px-8 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors inline-flex items-center justify-center gap-2 group whitespace-nowrap disabled:opacity-50"
                       >
-                        Join waitlist
-                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        {isLoading ? "Joining..." : "Join waitlist"}
+                        {!isLoading && <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />}
                       </button>
                     </div>
+                    {error && (
+                      <p className="text-sm text-red-500 mt-3">{error}</p>
+                    )}
                     <p className="text-xs text-muted-foreground mt-4 font-mono">
                       No spam · Unsubscribe anytime · Be first in line
                     </p>
