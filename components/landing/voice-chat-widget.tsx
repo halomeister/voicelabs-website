@@ -2,6 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Mic, MicOff, X, Phone } from "lucide-react";
+import Vapi from "@vapi-ai/web";
+
+const VAPI_PUBLIC_KEY = "9c7f5219-676b-4894-a13f-f5752199c0db";
+const VAPI_ASSISTANT_ID = "2c9e42c3-3692-489a-b15c-6ceda8483433";
 
 function VoiceWaveform({ active }: { active: boolean }) {
   return (
@@ -22,25 +26,66 @@ function VoiceWaveform({ active }: { active: boolean }) {
   );
 }
 
-const demoMessages = [
-  { role: "agent" as const, text: "Hi! I'm the VoiceLabs AI assistant. How can I help you today?" },
-  { role: "user" as const, text: "I'd like to learn more about your voice agents." },
-  { role: "agent" as const, text: "Our AI voice agents handle inbound and outbound calls 24/7. They can qualify leads, book meetings, and provide support in 30+ languages." },
-  { role: "user" as const, text: "Can I try a free demo?" },
-  { role: "agent" as const, text: "Absolutely! You can start with our free plan — 2 AI agents, 50 credits, no credit card required. Want me to help you get started?" },
-];
+interface Message {
+  role: "agent" | "user";
+  text: string;
+}
 
 export function VoiceChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isListening, setIsListening] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [callDuration, setCallDuration] = useState(0);
-  const [visibleMessages, setVisibleMessages] = useState<typeof demoMessages>([]);
-  const [currentDemo, setCurrentDemo] = useState(0);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const messagesRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const demoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const vapiRef = useRef<Vapi | null>(null);
+
+  // Initialize Vapi
+  useEffect(() => {
+    const vapi = new Vapi(VAPI_PUBLIC_KEY);
+    vapiRef.current = vapi;
+
+    vapi.on("call-start", () => {
+      setIsConnected(true);
+      setIsLoading(false);
+    });
+
+    vapi.on("call-end", () => {
+      setIsConnected(false);
+      setIsLoading(false);
+      setIsSpeaking(false);
+    });
+
+    vapi.on("speech-start", () => {
+      setIsSpeaking(true);
+    });
+
+    vapi.on("speech-end", () => {
+      setIsSpeaking(false);
+    });
+
+    vapi.on("message", (msg) => {
+      if (msg.type === "transcript" && msg.transcriptType === "final") {
+        setMessages((prev) => [
+          ...prev,
+          { role: msg.role === "assistant" ? "agent" : "user", text: msg.transcript },
+        ]);
+      }
+    });
+
+    vapi.on("error", (error) => {
+      console.error("Vapi error:", error);
+      setIsLoading(false);
+    });
+
+    return () => {
+      vapi.stop();
+    };
+  }, []);
 
   // Listen for mobile menu toggle
   useEffect(() => {
@@ -66,42 +111,37 @@ export function VoiceChatWidget() {
     };
   }, [isConnected]);
 
-  // Demo conversation auto-play
-  useEffect(() => {
-    if (isConnected && currentDemo < demoMessages.length) {
-      const delay = currentDemo === 0 ? 1000 : 2500;
-      demoRef.current = setTimeout(() => {
-        setVisibleMessages((prev) => [...prev, demoMessages[currentDemo]]);
-        if (demoMessages[currentDemo].role === "user") {
-          setIsListening(true);
-          setTimeout(() => setIsListening(false), 1200);
-        }
-        setCurrentDemo((prev) => prev + 1);
-      }, delay);
-    }
-    return () => {
-      if (demoRef.current) clearTimeout(demoRef.current);
-    };
-  }, [isConnected, currentDemo]);
-
   // Auto-scroll messages
   useEffect(() => {
     if (messagesRef.current) {
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     }
-  }, [visibleMessages]);
+  }, [messages]);
 
-  const handleConnect = () => {
-    setIsConnected(true);
-    setVisibleMessages([]);
-    setCurrentDemo(0);
+  const handleConnect = async () => {
+    if (!vapiRef.current) return;
+    setIsLoading(true);
+    setMessages([]);
+    try {
+      await vapiRef.current.start(VAPI_ASSISTANT_ID);
+    } catch (error) {
+      console.error("Failed to start call:", error);
+      setIsLoading(false);
+    }
   };
 
   const handleDisconnect = () => {
+    if (!vapiRef.current) return;
+    vapiRef.current.stop();
     setIsConnected(false);
-    setIsListening(false);
-    setVisibleMessages([]);
-    setCurrentDemo(0);
+    setIsSpeaking(false);
+  };
+
+  const handleToggleMute = () => {
+    if (!vapiRef.current) return;
+    const newMuted = !isMuted;
+    vapiRef.current.setMuted(newMuted);
+    setIsMuted(newMuted);
   };
 
   const handleClose = () => {
@@ -132,8 +172,7 @@ export function VoiceChatWidget() {
         ) : (
           <>
             <Mic className="w-4 h-4" />
-            <span className="text-sm font-medium">Voice Chat</span>
-            {/* Pulse indicator */}
+            <span className="text-sm font-medium">Talk to AI</span>
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
@@ -144,7 +183,7 @@ export function VoiceChatWidget() {
 
       {/* Chat panel */}
       <div
-        className={`fixed bottom-20 right-6 z-50 w-[360px] transition-all duration-500 origin-bottom-right ${
+        className={`fixed bottom-20 right-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] transition-all duration-500 origin-bottom-right ${
           isOpen
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 translate-y-4 pointer-events-none"
@@ -161,32 +200,41 @@ export function VoiceChatWidget() {
                 <div className="text-sm font-medium">VoiceLabs AI</div>
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? "bg-green-500" : "bg-foreground/20"}`} />
-                  {isConnected ? `Connected · ${formatTime(callDuration)}` : "Ready to connect"}
+                  {isConnected ? `Connected · ${formatTime(callDuration)}` : isLoading ? "Connecting..." : "Ready to connect"}
                 </div>
               </div>
             </div>
-            <span className="text-[10px] font-mono text-muted-foreground/50 px-2 py-1 border border-foreground/5 rounded">
-              🇺🇸 EN
-            </span>
+            <button onClick={handleClose} className="text-muted-foreground hover:text-foreground transition-colors">
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
           {/* Messages area */}
           <div ref={messagesRef} className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
-            {!isConnected && visibleMessages.length === 0 && (
+            {!isConnected && !isLoading && messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-center gap-4">
                 <div className="w-16 h-16 rounded-full bg-foreground/5 border border-foreground/10 flex items-center justify-center">
                   <Phone className="w-7 h-7 text-foreground/30" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium mb-1">Start a voice conversation</p>
+                  <p className="text-sm font-medium mb-1">Talk to VoiceLabs AI</p>
                   <p className="text-xs text-muted-foreground leading-relaxed max-w-[220px]">
-                    Click the button below to connect with our AI voice assistant.
+                    Ask about features, pricing, use cases, or anything about our platform.
                   </p>
                 </div>
               </div>
             )}
 
-            {visibleMessages.map((msg, i) => (
+            {isLoading && messages.length === 0 && (
+              <div className="flex flex-col items-center justify-center h-full text-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-foreground/5 border border-foreground/10 flex items-center justify-center animate-pulse">
+                  <Phone className="w-7 h-7 text-foreground/30" />
+                </div>
+                <p className="text-sm text-muted-foreground">Connecting...</p>
+              </div>
+            )}
+
+            {messages.map((msg, i) => (
               <div
                 key={i}
                 className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-in`}
@@ -202,30 +250,18 @@ export function VoiceChatWidget() {
                 </div>
               </div>
             ))}
-
-            {isConnected && isListening && (
-              <div className="flex justify-end">
-                <div className="bg-foreground/5 border border-foreground/10 rounded-2xl rounded-br-md px-4 py-3">
-                  <div className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 animate-bounce" style={{ animationDelay: "300ms" }} />
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Waveform + Controls */}
           <div className="border-t border-foreground/10 px-5 py-4 shrink-0">
             {isConnected && (
               <div className="mb-4">
-                <VoiceWaveform active={isConnected && !isListening && currentDemo < demoMessages.length} />
+                <VoiceWaveform active={isSpeaking} />
               </div>
             )}
 
             <div className="flex items-center justify-center gap-3">
-              {!isConnected ? (
+              {!isConnected && !isLoading ? (
                 <button
                   onClick={handleConnect}
                   className="flex items-center gap-2 px-6 py-3 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors group"
@@ -233,18 +269,26 @@ export function VoiceChatWidget() {
                   <Phone className="w-4 h-4 group-hover:animate-pulse" />
                   Start conversation
                 </button>
+              ) : isLoading ? (
+                <button
+                  disabled
+                  className="flex items-center gap-2 px-6 py-3 bg-foreground/50 text-background rounded-full text-sm font-medium cursor-not-allowed"
+                >
+                  <div className="w-4 h-4 border-2 border-background/30 border-t-background rounded-full animate-spin" />
+                  Connecting...
+                </button>
               ) : (
                 <>
                   <button
-                    onClick={() => setIsListening(!isListening)}
+                    onClick={handleToggleMute}
                     className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
-                      isListening
+                      !isMuted
                         ? "bg-foreground text-background scale-110"
                         : "bg-foreground/5 border border-foreground/10 text-foreground hover:bg-foreground/10"
                     }`}
-                    aria-label={isListening ? "Mute" : "Unmute"}
+                    aria-label={isMuted ? "Unmute" : "Mute"}
                   >
-                    {isListening ? <Mic className="w-5 h-5" /> : <MicOff className="w-5 h-5" />}
+                    {!isMuted ? <Mic className="w-5 h-5" /> : <MicOff className="w-5 h-5" />}
                   </button>
 
                   <button
