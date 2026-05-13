@@ -49,30 +49,30 @@ export function InfrastructureSection() {
               <span className="w-8 h-px bg-foreground/30" />
               Infrastructure
             </span>
-            <h2 className="text-4xl lg:text-6xl font-display tracking-tight mb-8">
+            <h2 className="text-3xl lg:text-6xl font-display tracking-tight mb-6 lg:mb-8">
               Powerful voice
               <br />
               connectivity.
             </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed mb-12">
+            <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed mb-8 lg:mb-12">
               AI agents that connect with customers globally through reliable, 
               high-quality voice interactions — powered by premium call infrastructure 
               with sub-500ms latency across 100+ countries.
             </p>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-8">
+            <div className="grid grid-cols-3 gap-4 md:gap-8">
               <div>
-                <div className="text-4xl lg:text-5xl font-display mb-2">100+</div>
-                <div className="text-sm text-muted-foreground">Countries</div>
+                <div className="text-2xl md:text-4xl lg:text-5xl font-display mb-1 md:mb-2">100+</div>
+                <div className="text-xs md:text-sm text-muted-foreground">Countries</div>
               </div>
               <div>
-                <div className="text-4xl lg:text-5xl font-display mb-2">99.99%</div>
-                <div className="text-sm text-muted-foreground">Uptime SLA</div>
+                <div className="text-2xl md:text-4xl lg:text-5xl font-display mb-1 md:mb-2">99.99%</div>
+                <div className="text-xs md:text-sm text-muted-foreground">Uptime SLA</div>
               </div>
               <div>
-                <div className="text-4xl lg:text-5xl font-display mb-2">&lt;500ms</div>
-                <div className="text-sm text-muted-foreground">Call latency</div>
+                <div className="text-2xl md:text-4xl lg:text-5xl font-display mb-1 md:mb-2">&lt;500ms</div>
+                <div className="text-xs md:text-sm text-muted-foreground">Call latency</div>
               </div>
             </div>
           </div>
@@ -85,8 +85,8 @@ export function InfrastructureSection() {
           >
             <div className="border border-foreground/10">
               {/* Header */}
-              <div className="px-6 py-4 border-b border-foreground/10 flex items-center justify-between">
-                <span className="text-sm font-mono text-muted-foreground">Edge Network</span>
+              <div className="px-4 md:px-6 py-3 md:py-4 border-b border-foreground/10 flex items-center justify-between">
+                <span className="text-xs md:text-sm font-mono text-muted-foreground">Edge Network</span>
                 <span className="flex items-center gap-2 text-xs font-mono text-green-600">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                   All operational
@@ -98,22 +98,22 @@ export function InfrastructureSection() {
                 {locations.map((location, index) => (
                   <div
                     key={location.city}
-                    className={`px-6 py-5 border-b border-foreground/5 last:border-b-0 flex items-center justify-between transition-all duration-300 ${
+                    className={`px-4 md:px-6 py-4 md:py-5 border-b border-foreground/5 last:border-b-0 flex items-center justify-between transition-all duration-300 ${
                       activeLocation === index ? "bg-foreground/[0.02]" : ""
                     }`}
                   >
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3 md:gap-4">
                       <span 
                         className={`w-2 h-2 rounded-full transition-colors duration-300 ${
                           activeLocation === index ? "bg-foreground" : "bg-foreground/20"
                         }`}
                       />
                       <div>
-                        <div className="font-medium">{location.city}</div>
-                        <div className="text-sm text-muted-foreground">{location.region}</div>
+                        <div className="font-medium text-sm md:text-base">{location.city}</div>
+                        <div className="text-xs md:text-sm text-muted-foreground">{location.region}</div>
                       </div>
                     </div>
-                    <span className="font-mono text-sm text-muted-foreground">{location.latency}</span>
+                    <span className="font-mono text-xs md:text-sm text-muted-foreground">{location.latency}</span>
                   </div>
                 ))}
               </div>
