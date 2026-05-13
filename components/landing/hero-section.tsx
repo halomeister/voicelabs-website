@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { AnimatedSphere } from "./animated-sphere";
 
 const words = ["sell", "support", "qualify", "convert"];
+
+const stats = [
+  { value: "5X", label: "Productivity Boost" },
+  { value: "100X", label: "Scalability" },
+  { value: "24/7", label: "Autonomous Calling" },
+  { value: "<500ms", label: "Voice Latency" },
+];
 
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -23,150 +28,83 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
-      {/* Animated sphere background */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] lg:w-[800px] lg:h-[800px] opacity-40 pointer-events-none">
-        <AnimatedSphere />
-      </div>
-      
-      {/* Subtle grid lines */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-        {[...Array(8)].map((_, i) => (
+    <section className="relative bg-white overflow-hidden">
+      {/* Main content */}
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 lg:pt-40 pb-16 lg:pb-24">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          {/* Left: Headline */}
           <div
-            key={`h-${i}`}
-            className="absolute h-px bg-foreground/10"
-            style={{
-              top: `${12.5 * (i + 1)}%`,
-              left: 0,
-              right: 0,
-            }}
-          />
-        ))}
-        {[...Array(12)].map((_, i) => (
-          <div
-            key={`v-${i}`}
-            className="absolute w-px bg-foreground/10"
-            style={{
-              left: `${8.33 * (i + 1)}%`,
-              top: 0,
-              bottom: 0,
-            }}
-          />
-        ))}
-      </div>
-      
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 py-32 lg:py-40 pb-48 lg:pb-56">
-        {/* Eyebrow */}
-        <div 
-          className={`mb-8 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
-          <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground">
-            <span className="w-8 h-px bg-foreground/30" />
-            No-code AI voice engine
-          </span>
-        </div>
-        
-        {/* Main headline */}
-        <div className="mb-12">
-          <h1 
-            className={`text-[clamp(3rem,12vw,10rem)] font-display leading-[0.9] tracking-tight transition-all duration-1000 ${
+            className={`transition-all duration-1000 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <span className="block">AI voice agents</span>
-            <span className="block">that{" "}
-              <span className="relative inline-block">
-                <span 
-                  key={wordIndex}
-                  className="inline-flex"
-                >
+            <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-display leading-[1.1] tracking-tight text-gray-900">
+              AI Voice Agents
+              <br />
+              that{" "}
+              <span className="relative inline-block text-[#7c3aed]">
+                <span key={wordIndex} className="inline-flex">
                   {words[wordIndex].split("").map((char, i) => (
                     <span
                       key={`${wordIndex}-${i}`}
                       className="inline-block animate-char-in"
-                      style={{
-                        animationDelay: `${i * 50}ms`,
-                      }}
+                      style={{ animationDelay: `${i * 50}ms` }}
                     >
                       {char}
                     </span>
                   ))}
                 </span>
-                <span className="absolute -bottom-2 left-0 right-0 h-3 bg-foreground/10" />
               </span>
-            </span>
-          </h1>
-        </div>
-        
-        {/* Description */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-          <p 
-            className={`text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-xl transition-all duration-700 delay-200 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            </h1>
+          </div>
+
+          {/* Right: Description + CTAs */}
+          <div
+            className={`transition-all duration-1000 delay-200 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            Create human-like AI voice agents to handle outbound and inbound calls, 
-            book meetings, and take actions — 24/7, without writing a single line of code.
-          </p>
-          
-          {/* CTAs */}
-          <div 
-            className={`flex flex-col sm:flex-row items-stretch sm:items-start gap-4 transition-all duration-700 delay-300 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
-            <Button 
-              size="lg" 
-              className="bg-foreground hover:bg-foreground/90 text-background px-8 h-14 text-base rounded-full group w-full sm:w-auto"
-            >
-              Get started free
-              <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="h-14 px-8 text-base rounded-full border-foreground/20 hover:bg-foreground/5 w-full sm:w-auto"
-              onClick={() => window.location.href = "/demo"}
-            >
-              Book a demo
-            </Button>
+            <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-lg">
+              Voice AI Agents that drive revenue by handling outbound sales, inbound support,
+              and appointment booking — 24/7, in 30+ languages, without writing a single line of code.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <a
+                href="/demo"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-sm font-medium rounded-full transition-colors group"
+              >
+                Book a Demo
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+              <a
+                href="#features"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-full hover:bg-gray-50 transition-colors"
+              >
+                See how it works
+              </a>
+            </div>
           </div>
         </div>
-        
-      </div>
-      
-      {/* Stats marquee - full width outside container */}
-      <div 
-        className={`absolute bottom-12 md:bottom-24 left-0 right-0 transition-all duration-700 delay-500 ${
-          isVisible ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <div className="flex gap-8 md:gap-16 marquee whitespace-nowrap">
-          {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex gap-8 md:gap-16">
-              {[
-                { value: "5X", label: "productivity boost", company: "SALES TEAMS" },
-                { value: "100X", label: "scalability", company: "ENTERPRISE CLIENT" },
-                { value: "24/7", label: "autonomous calling", company: "SUPPORT OPS" },
-                { value: "< 500ms", label: "voice latency", company: "GLOBAL REACH" },
-              ].map((stat) => (
-                <div key={`${stat.company}-${i}`} className="flex items-baseline gap-2 md:gap-4">
-                  <span className="text-2xl md:text-4xl lg:text-5xl font-display">{stat.value}</span>
-                  <span className="text-xs md:text-sm text-muted-foreground">
-                    {stat.label}
-                    <span className="block font-mono text-[10px] md:text-xs mt-1">{stat.company}</span>
-                  </span>
+
+        {/* Stats row */}
+        <div
+          className={`mt-16 lg:mt-24 pt-10 border-t border-gray-100 transition-all duration-1000 delay-500 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+            {stats.map((stat) => (
+              <div key={stat.label}>
+                <div className="text-3xl md:text-4xl lg:text-5xl font-display text-[#7c3aed] mb-1">
+                  {stat.value}
                 </div>
-              ))}
-            </div>
-          ))}
+                <div className="text-sm text-gray-500">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      
-      {/* Scroll indicator */}
-      
     </section>
   );
 }

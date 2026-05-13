@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 
 const navLinks = [
   { name: "Features", href: "#features" },
@@ -32,63 +31,52 @@ export function Navigation() {
 
   return (
     <header
-      className={`fixed z-50 transition-all duration-500 ${
-        isScrolled 
-          ? "top-4 left-4 right-4" 
-          : "top-0 left-0 right-0"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled ? "shadow-sm" : ""
       }`}
     >
-      <nav 
-        className={`mx-auto transition-all duration-500 ${
-          isScrolled || isMobileMenuOpen
-            ? "bg-background/80 backdrop-blur-xl border border-foreground/10 rounded-2xl shadow-lg max-w-[1200px]"
-            : "bg-transparent max-w-[1400px]"
-        }`}
-      >
-        <div 
-          className={`flex items-center justify-between transition-all duration-500 px-6 lg:px-8 ${
-            isScrolled ? "h-14" : "h-20"
-          }`}
-        >
+      <nav className="bg-white border-b border-gray-100">
+        <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 lg:px-12 h-16 lg:h-[72px]">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2 group">
-            <span className={`font-display tracking-tight transition-all duration-500 ${isScrolled ? "text-xl" : "text-2xl"}`}>VoiceLabs</span>
-            <span className={`text-muted-foreground font-mono transition-all duration-500 ${isScrolled ? "text-[10px] mt-0.5" : "text-xs mt-1"}`}>AI</span>
+          <a href="/" className="flex items-center gap-1.5">
+            <span className="text-xl lg:text-2xl font-display tracking-tight text-gray-900">VoiceLabs</span>
+            <span className="text-[10px] lg:text-xs text-gray-400 font-mono mt-1">AI</span>
           </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-12">
+          <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="text-sm text-foreground/70 hover:text-foreground transition-colors duration-300 relative group"
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
               >
                 {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-4">
-            <a href="https://voicelabs-app.vercel.app/login" className={`text-foreground/70 hover:text-foreground transition-all duration-500 relative z-10 ${isScrolled ? "text-xs" : "text-sm"}`}>
-              Log in
-              <span className="absolute -top-2 -right-8 z-50 px-1.5 py-0.5 bg-white text-black text-[9px] font-mono rounded-full leading-none border border-foreground/10">soon</span>
-            </a>
-            <Button
-              size="sm"
-              className={`bg-foreground hover:bg-foreground/90 text-background rounded-full transition-all duration-500 relative ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
+          <div className="hidden lg:flex items-center gap-5">
+            <a
+              href="https://voicelabs-app.vercel.app/login"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
             >
-              Sign up
-              <span className="absolute -top-1.5 -right-1.5 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            </Button>
+              Log in
+            </a>
+            <a
+              href="/demo"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-sm font-medium rounded-full transition-colors group"
+            >
+              Book a Demo
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2"
+            className="lg:hidden p-2 text-gray-700"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? (
@@ -98,71 +86,70 @@ export function Navigation() {
             )}
           </button>
         </div>
-
       </nav>
-      
-      {/* Mobile Menu - Full Screen Overlay */}
+
+      {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed inset-0 bg-background z-40 transition-all duration-500 ${
-          isMobileMenuOpen 
-            ? "opacity-100 pointer-events-auto" 
+        className={`lg:hidden fixed inset-0 bg-white z-40 transition-all duration-500 ${
+          isMobileMenuOpen
+            ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         }`}
         style={{ top: 0 }}
       >
-        <div className="flex flex-col h-full px-8 pt-28 pb-24">
+        <div className="flex flex-col h-full px-6 pt-24 pb-12">
           {/* Close button */}
           <button
             onClick={() => setIsMobileMenuOpen(false)}
-            className="fixed top-7 right-7 z-50 p-2 text-foreground/70 hover:text-foreground transition-colors"
+            className="fixed top-5 right-5 z-50 p-2 text-gray-500 hover:text-gray-900 transition-colors"
             aria-label="Close menu"
           >
-            <X className="w-7 h-7" />
+            <X className="w-6 h-6" />
           </button>
 
           {/* Navigation Links */}
-          <div className="flex-1 flex flex-col justify-center gap-8">
+          <div className="flex-1 flex flex-col gap-1">
             {navLinks.map((link, i) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-5xl font-display text-foreground hover:text-muted-foreground transition-all duration-500 ${
-                  isMobileMenuOpen 
-                    ? "opacity-100 translate-y-0" 
+                className={`text-2xl font-display text-gray-900 hover:text-[#7c3aed] py-3 transition-all duration-500 ${
+                  isMobileMenuOpen
+                    ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-4"
                 }`}
-                style={{ transitionDelay: isMobileMenuOpen ? `${i * 75}ms` : "0ms" }}
+                style={{ transitionDelay: isMobileMenuOpen ? `${i * 50}ms` : "0ms" }}
               >
                 {link.name}
               </a>
             ))}
           </div>
-          
+
           {/* Bottom CTAs */}
-          <div className={`flex gap-4 pt-8 border-t border-foreground/10 transition-all duration-500 ${
-            isMobileMenuOpen 
-              ? "opacity-100 translate-y-0" 
-              : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: isMobileMenuOpen ? "300ms" : "0ms" }}
+          <div
+            className={`flex flex-col gap-3 pt-6 border-t border-gray-100 transition-all duration-500 ${
+              isMobileMenuOpen
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-4"
+            }`}
+            style={{ transitionDelay: isMobileMenuOpen ? "300ms" : "0ms" }}
           >
-            <Button 
-              variant="outline" 
-              className="flex-1 rounded-full h-14 text-base"
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                window.location.href = "https://voicelabs-app.vercel.app/login";
-              }}
+            <a
+              href="/demo"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center justify-center gap-2 h-14 bg-[#7c3aed] hover:bg-[#6d28d9] text-white rounded-full text-base font-medium transition-colors"
+            >
+              Book a Demo
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <a
+              href="https://voicelabs-app.vercel.app/login"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center justify-center h-14 border border-gray-200 text-gray-700 rounded-full text-base font-medium hover:bg-gray-50 transition-colors"
             >
               Log in
-            </Button>
-            <Button 
-              className="flex-1 bg-foreground text-background rounded-full h-14 text-base"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Sign up
-            </Button>
+            </a>
           </div>
         </div>
       </div>
