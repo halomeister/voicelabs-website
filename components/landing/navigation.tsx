@@ -147,7 +147,7 @@ export function Navigation() {
               href="/demo"
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-sm font-medium rounded-full transition-colors group"
             >
-              Book a Demo
+              Sign Up
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
@@ -248,7 +248,7 @@ export function Navigation() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center justify-center gap-2 h-14 bg-[#7c3aed] hover:bg-[#6d28d9] text-white rounded-full text-base font-medium transition-colors"
             >
-              Book a Demo
+              Sign Up
               <ArrowRight className="w-4 h-4" />
             </a>
             <a

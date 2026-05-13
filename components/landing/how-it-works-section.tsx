@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from "react";
 
 const steps = [
   {
-    number: "I",
+    number: "01",
     title: "Create your agent",
-    description: "Give your agent a name, select its language and accent, and configure its personality — no coding or ML expertise required.",
+    description:
+      "Give your agent a name, select its language and accent, and configure its personality — no coding or ML expertise required.",
     code: `import { VoiceLabs } from '@voicelabs/sdk'
 
 const agent = VoiceLabs.agent({
@@ -17,9 +18,10 @@ const agent = VoiceLabs.agent({
 })`,
   },
   {
-    number: "II",
+    number: "02",
     title: "Train with your data",
-    description: "Upload documents, scripts, and FAQs. Your agent learns your business instantly and handles conversations with context and accuracy.",
+    description:
+      "Upload documents, scripts, and FAQs. Your agent learns your business instantly and handles conversations with context and accuracy.",
     code: `agent.train({
   knowledge: ['product-docs.pdf'],
   scripts: ['sales-pitch.md'],
@@ -31,9 +33,10 @@ const agent = VoiceLabs.agent({
 })`,
   },
   {
-    number: "III",
+    number: "03",
     title: "Launch campaigns",
-    description: "Upload your contact list, set a schedule, and let your agents make thousands of calls simultaneously. Monitor results in real-time.",
+    description:
+      "Upload your contact list, set a schedule, and let your agents make thousands of calls simultaneously. Monitor results in real-time.",
     code: `await agent.campaign({
   type: 'outbound',
   contacts: 'leads-q4.csv',
@@ -58,7 +61,6 @@ export function HowItWorksSection() {
       },
       { threshold: 0.1 }
     );
-
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
@@ -66,7 +68,7 @@ export function HowItWorksSection() {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % steps.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(interval);
   }, []);
 
@@ -74,126 +76,123 @@ export function HowItWorksSection() {
     <section
       id="how-it-works"
       ref={sectionRef}
-      className="relative py-24 lg:py-32 bg-foreground text-background overflow-hidden"
+      className="relative bg-gray-50 py-20 lg:py-32"
     >
-      {/* Diagonal lines pattern */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 40px,
-            currentColor 40px,
-            currentColor 41px
-          )`
-        }} />
-      </div>
-
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Header */}
-        <div className="mb-12 lg:mb-24">
-          <span className="inline-flex items-center gap-3 text-sm font-mono text-background/50 mb-6">
-            <span className="w-8 h-px bg-background/30" />
-            Process
+        <div
+          className={`mb-12 lg:mb-16 transition-all duration-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <span className="text-sm font-mono text-[#7c3aed] uppercase tracking-wider block mb-4">
+            How it works
           </span>
-          <h2
-            className={`text-3xl lg:text-6xl font-display tracking-tight transition-all duration-700 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display tracking-tight text-gray-900">
             Three steps.
-            <br />
-            <span className="text-background/50">Go live in minutes.</span>
+            <span className="text-gray-400"> Go live in minutes.</span>
           </h2>
         </div>
 
-        {/* Main content */}
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
-          {/* Steps */}
-          <div className="space-y-0">
-            {steps.map((step, index) => (
-              <button
-                key={step.number}
-                type="button"
-                onClick={() => setActiveStep(index)}
-                className={`w-full text-left py-6 md:py-8 border-b border-background/10 transition-all duration-500 group ${
-                  activeStep === index ? "opacity-100" : "opacity-40 hover:opacity-70"
-                }`}
-              >
-                <div className="flex items-start gap-4 md:gap-6">
-                  <span className="font-display text-2xl md:text-3xl text-background/30">{step.number}</span>
-                  <div className="flex-1">
-                    <h3 className="text-xl md:text-2xl lg:text-3xl font-display mb-2 md:mb-3 group-hover:translate-x-2 transition-transform duration-300">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm md:text-base text-background/60 leading-relaxed">
-                      {step.description}
-                    </p>
-                    
-                    {/* Progress indicator */}
-                    {activeStep === index && (
-                      <div className="mt-4 h-px bg-background/20 overflow-hidden">
-                        <div 
-                          className="h-full bg-background w-0"
-                          style={{
-                            animation: 'progress 5s linear forwards'
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </button>
+        {/* Stepper */}
+        <div
+          className={`mb-12 transition-all duration-1000 delay-200 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="flex items-center gap-0 overflow-x-auto scrollbar-hide">
+            {steps.map((step, i) => (
+              <div key={step.number} className="flex items-center">
+                <button
+                  onClick={() => setActiveStep(i)}
+                  className={`flex items-center gap-3 px-5 py-3 rounded-full whitespace-nowrap transition-all ${
+                    activeStep === i
+                      ? "bg-[#7c3aed] text-white"
+                      : "bg-white border border-gray-200 text-gray-600 hover:border-[#7c3aed]/30"
+                  }`}
+                >
+                  <span
+                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-mono ${
+                      activeStep === i
+                        ? "bg-white/20 text-white"
+                        : "bg-gray-100 text-gray-500"
+                    }`}
+                  >
+                    {step.number}
+                  </span>
+                  <span className="text-sm font-medium">{step.title}</span>
+                </button>
+                {i < steps.length - 1 && (
+                  <div className="w-8 md:w-12 h-px bg-gray-200 mx-1 flex-shrink-0" />
+                )}
+              </div>
             ))}
           </div>
 
-          {/* Code display */}
-          <div className="lg:sticky lg:top-32 self-start">
-            <div className="border border-background/10 overflow-hidden">
-              {/* Window header */}
-              <div className="px-4 md:px-6 py-3 md:py-4 border-b border-background/10 flex items-center justify-between">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-background/20" />
-                  <div className="w-3 h-3 rounded-full bg-background/20" />
-                  <div className="w-3 h-3 rounded-full bg-background/20" />
+          {/* Progress bar */}
+          <div className="mt-4 h-1 bg-gray-200 rounded-full overflow-hidden max-w-2xl">
+            <div
+              className="h-full bg-[#7c3aed] rounded-full transition-all duration-300"
+              style={{ width: `${((activeStep + 1) / steps.length) * 100}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Content card */}
+        <div
+          className={`transition-all duration-1000 delay-300 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <div className="grid lg:grid-cols-2 gap-0">
+              {/* Left: Description */}
+              <div className="p-8 md:p-12 flex flex-col justify-center">
+                <div className="inline-flex items-center gap-2 mb-4">
+                  <span className="w-8 h-8 rounded-full bg-[#7c3aed]/10 flex items-center justify-center text-xs font-mono text-[#7c3aed]">
+                    {steps[activeStep].number}
+                  </span>
+                  <span className="text-sm font-mono text-[#7c3aed]">
+                    Step {activeStep + 1} of {steps.length}
+                  </span>
                 </div>
-                <span className="text-xs font-mono text-background/40">workflow.ts</span>
+                <h3 className="text-2xl md:text-3xl font-display text-gray-900 mb-4">
+                  {steps[activeStep].title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed text-base">
+                  {steps[activeStep].description}
+                </p>
               </div>
 
-              {/* Code content */}
-              <div className="p-4 md:p-8 font-mono text-[10px] sm:text-xs md:text-sm min-h-[220px] md:min-h-[280px] overflow-x-auto">
-                <pre className="text-background/70">
-                  {steps[activeStep].code.split('\n').map((line, lineIndex) => (
-                    <div 
-                      key={`${activeStep}-${lineIndex}`} 
-                      className="leading-relaxed md:leading-loose code-line-reveal whitespace-pre"
-                      style={{ 
-                        animationDelay: `${lineIndex * 80}ms`,
-                      }}
-                    >
-                      <span className="text-background/20 select-none w-6 md:w-8 inline-block">{lineIndex + 1}</span>
-                      <span className="inline-flex">
-                        {line.split('').map((char, charIndex) => (
-                          <span
-                            key={`${activeStep}-${lineIndex}-${charIndex}`}
-                            className="code-char-reveal"
-                            style={{
-                              animationDelay: `${lineIndex * 80 + charIndex * 15}ms`,
-                            }}
-                          >
-                            {char === ' ' ? '\u00A0' : char}
-                          </span>
-                        ))}
-                      </span>
-                    </div>
-                  ))}
-                </pre>
-              </div>
+              {/* Right: Code */}
+              <div className="bg-gray-900 p-8 md:p-12 flex items-center">
+                <div className="w-full">
+                  {/* Window dots */}
+                  <div className="flex items-center gap-2 mb-6">
+                    <div className="w-3 h-3 rounded-full bg-white/10" />
+                    <div className="w-3 h-3 rounded-full bg-white/10" />
+                    <div className="w-3 h-3 rounded-full bg-white/10" />
+                    <span className="ml-auto text-xs font-mono text-white/30">
+                      workflow.ts
+                    </span>
+                  </div>
 
-              {/* Status */}
-              <div className="px-4 md:px-6 py-3 md:py-4 border-t border-background/10 flex items-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-xs font-mono text-background/40">Ready</span>
+                  {/* Code */}
+                  <pre className="font-mono text-[11px] sm:text-xs md:text-sm text-white/80 leading-relaxed overflow-x-auto">
+                    {steps[activeStep].code.split("\n").map((line, lineIndex) => (
+                      <div
+                        key={`${activeStep}-${lineIndex}`}
+                        className="animate-fade-in"
+                        style={{ animationDelay: `${lineIndex * 60}ms` }}
+                      >
+                        <span className="text-white/20 select-none inline-block w-6 mr-3">
+                          {lineIndex + 1}
+                        </span>
+                        {line}
+                      </div>
+                    ))}
+                  </pre>
+                </div>
               </div>
             </div>
           </div>
@@ -201,34 +200,15 @@ export function HowItWorksSection() {
       </div>
 
       <style jsx>{`
-        @keyframes progress {
-          from { width: 0%; }
-          to { width: 100%; }
-        }
-        
-        .code-line-reveal {
+        .animate-fade-in {
           opacity: 0;
-          transform: translateX(-8px);
-          animation: lineReveal 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          transform: translateY(4px);
+          animation: fadeIn 0.4s ease-out forwards;
         }
-        
-        @keyframes lineReveal {
+        @keyframes fadeIn {
           to {
             opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        
-        .code-char-reveal {
-          opacity: 0;
-          filter: blur(8px);
-          animation: charReveal 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-        
-        @keyframes charReveal {
-          to {
-            opacity: 1;
-            filter: blur(0);
+            transform: translateY(0);
           }
         }
       `}</style>
