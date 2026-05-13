@@ -8,14 +8,7 @@ const plans = [
     name: "Free",
     description: "Perfect for trying out AI calling",
     price: { monthly: 0, annual: 0 },
-    features: [
-      "2 AI Agents",
-      "3 Campaigns",
-      "Max 10 contacts",
-      "Own phone numbers",
-      "Choose your LLM",
-      "50 included credits",
-    ],
+    features: ["2 AI Agents", "3 Campaigns", "Max 10 contacts", "Own phone numbers", "Choose your LLM", "50 included credits"],
     cta: "Get started",
     popular: false,
   },
@@ -23,16 +16,7 @@ const plans = [
     name: "Pro",
     description: "For growing businesses with advanced needs",
     price: { monthly: 49, annual: 39 },
-    features: [
-      "25 AI Agents",
-      "50 Campaigns",
-      "Max 1,000 contacts",
-      "25 Flow Automations",
-      "25 Knowledge Bases",
-      "10 Phone Numbers",
-      "500 included credits",
-      "Priority support",
-    ],
+    features: ["25 AI Agents", "50 Campaigns", "Max 1,000 contacts", "25 Flow Automations", "25 Knowledge Bases", "10 Phone Numbers", "500 included credits", "Priority support"],
     cta: "Start free trial",
     popular: true,
   },
@@ -40,16 +24,7 @@ const plans = [
     name: "Enterprise",
     description: "For large-scale call operations",
     price: { monthly: null, annual: null },
-    features: [
-      "Everything in Pro",
-      "Unlimited agents",
-      "Unlimited campaigns",
-      "Dedicated account manager",
-      "Custom integrations",
-      "SLA guarantee",
-      "On-premise option",
-      "Custom contracts",
-    ],
+    features: ["Everything in Pro", "Unlimited agents", "Unlimited campaigns", "Dedicated account manager", "Custom integrations", "SLA guarantee", "On-premise option", "Custom contracts"],
     cta: "Contact sales",
     popular: false,
   },
@@ -59,125 +34,86 @@ export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(true);
 
   return (
-    <section id="pricing" className="relative py-32 lg:py-40 border-t border-foreground/10">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <section id="pricing" className="relative bg-white py-20 lg:py-32">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
         {/* Header */}
-        <div className="max-w-3xl mb-20">
-          <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase block mb-6">
-            Pricing
-          </span>
-          <h2 className="font-display text-4xl md:text-6xl lg:text-7xl tracking-tight text-foreground mb-6">
+        <div className="text-center mb-12">
+          <span className="text-sm font-mono text-[#7c3aed] uppercase tracking-wider block mb-4">Pricing</span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display tracking-tight text-gray-900 mb-4">
             Simple, transparent
-            <br />
-            <span className="text-stroke">pricing</span>
+            <span className="text-gray-400"> pricing</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-xl">
+          <p className="text-lg text-gray-600 max-w-xl mx-auto">
             Start free, upgrade when you&apos;re ready. No hidden fees, no surprises.
           </p>
         </div>
 
-        {/* Billing Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-16">
-          <span
-            className={`text-sm transition-colors ${
-              !isAnnual ? "text-foreground" : "text-muted-foreground"
-            }`}
-          >
-            Monthly
-          </span>
+        {/* Toggle */}
+        <div className="flex items-center justify-center gap-4 mb-12">
+          <span className={`text-sm ${!isAnnual ? "text-gray-900" : "text-gray-400"}`}>Monthly</span>
           <button
             onClick={() => setIsAnnual(!isAnnual)}
-            className="relative w-14 h-7 bg-foreground/10 rounded-full p-1 transition-colors hover:bg-foreground/20"
+            className="relative w-12 h-6 bg-[#7c3aed]/20 rounded-full p-0.5 transition-colors"
           >
-            <div
-              className={`w-5 h-5 bg-foreground rounded-full transition-transform duration-300 ${
-                isAnnual ? "translate-x-7" : "translate-x-0"
-              }`}
-            />
+            <div className={`w-5 h-5 bg-[#7c3aed] rounded-full transition-transform ${isAnnual ? "translate-x-6" : "translate-x-0"}`} />
           </button>
-          <span
-            className={`text-sm transition-colors ${
-              isAnnual ? "text-foreground" : "text-muted-foreground"
-            }`}
-          >
-            Annual
-          </span>
-          {isAnnual && (
-            <span className="ml-2 px-2 py-1 bg-foreground text-primary-foreground text-xs font-mono">
-              Save 17%
-            </span>
-          )}
+          <span className={`text-sm ${isAnnual ? "text-gray-900" : "text-gray-400"}`}>Annual</span>
+          {isAnnual && <span className="px-2 py-1 bg-[#7c3aed] text-white text-xs rounded-full font-medium">Save 17%</span>}
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-px bg-foreground/10">
-          {plans.map((plan, idx) => (
+        {/* Cards */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative p-8 lg:p-12 bg-background flex flex-col ${
-                plan.popular ? "md:-my-4 md:py-12 lg:py-16 border-2 border-foreground" : ""
+              className={`relative bg-white border rounded-2xl p-8 flex flex-col ${
+                plan.popular ? "border-[#7c3aed] shadow-lg shadow-[#7c3aed]/10" : "border-gray-200"
               }`}
             >
               {plan.popular && (
-                <span className="absolute -top-3 left-8 px-3 py-1 bg-foreground text-primary-foreground text-xs font-mono uppercase tracking-widest">
+                <span className="absolute -top-3 left-6 px-3 py-1 bg-[#7c3aed] text-white text-xs font-medium rounded-full">
                   Most Popular
                 </span>
               )}
-
-              {/* Plan Header */}
-              <div className="mb-8">
-                <span className="font-mono text-xs text-muted-foreground">
-                  {String(idx + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-display text-3xl text-foreground mt-2">{plan.name}</h3>
-                <p className="text-sm text-muted-foreground mt-2">{plan.description}</p>
+              <div className="mb-6">
+                <h3 className="text-xl font-display text-gray-900">{plan.name}</h3>
+                <p className="text-sm text-gray-500 mt-1">{plan.description}</p>
               </div>
-
-              {/* Price */}
-              <div className="mb-8 pb-8 border-b border-foreground/10">
+              <div className="mb-6">
                 {plan.price.monthly !== null ? (
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-display text-5xl lg:text-6xl text-foreground">
-                      ${isAnnual ? plan.price.annual : plan.price.monthly}
-                    </span>
-                    <span className="text-muted-foreground">/month</span>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-display text-gray-900">${isAnnual ? plan.price.annual : plan.price.monthly}</span>
+                    <span className="text-gray-400 text-sm">/month</span>
                   </div>
                 ) : (
-                  <span className="font-display text-4xl text-foreground">Custom</span>
+                  <span className="text-3xl font-display text-gray-900">Custom</span>
                 )}
               </div>
-
-              {/* Features */}
-              <ul className="space-y-4 mb-10 flex-1">
+              <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3">
-                    <Check className="w-4 h-4 text-foreground mt-0.5 shrink-0" />
-                    <span className="text-sm text-muted-foreground">{feature}</span>
+                  <li key={feature} className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-[#7c3aed] mt-0.5 shrink-0" />
+                    <span className="text-sm text-gray-600">{feature}</span>
                   </li>
                 ))}
               </ul>
-
-              {/* CTA */}
-              <button
-                className={`w-full py-4 flex items-center justify-center gap-2 text-sm font-medium transition-all group ${
+              <a
+                href="/demo"
+                className={`w-full py-3 flex items-center justify-center gap-2 text-sm font-medium rounded-full transition-all group ${
                   plan.popular
-                    ? "bg-foreground text-primary-foreground hover:bg-foreground/90"
-                    : "border border-foreground/20 text-foreground hover:border-foreground hover:bg-foreground/5"
+                    ? "bg-[#7c3aed] text-white hover:bg-[#6d28d9]"
+                    : "border border-gray-200 text-gray-700 hover:border-[#7c3aed] hover:text-[#7c3aed]"
                 }`}
               >
                 {plan.cta}
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </button>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
             </div>
           ))}
         </div>
 
-        {/* Bottom Note */}
-        <p className="mt-12 text-center text-sm text-muted-foreground">
-          All plans include 14-day money-back guarantee. No credit card required for free plan.{" "}
-          <a href="#" className="underline underline-offset-4 hover:text-foreground transition-colors">
-            Compare all features
-          </a>
+        <p className="mt-10 text-center text-sm text-gray-400">
+          All plans include 14-day money-back guarantee. No credit card required for free plan.
         </p>
       </div>
     </section>

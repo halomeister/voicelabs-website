@@ -8,7 +8,7 @@ const locations = [
   { city: "London", region: "Europe", latency: "24ms" },
   { city: "Tokyo", region: "Asia Pacific", latency: "32ms" },
   { city: "Sydney", region: "Oceania", latency: "45ms" },
-  { city: "Sao Paulo", region: "South America", latency: "38ms" },
+  { city: "São Paulo", region: "South America", latency: "38ms" },
 ];
 
 export function InfrastructureSection() {
@@ -18,12 +18,9 @@ export function InfrastructureSection() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
       { threshold: 0.1 }
     );
-
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
@@ -36,84 +33,61 @@ export function InfrastructureSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-white py-20 lg:py-32">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          {/* Left: Content */}
-          <div
-            className={`transition-all duration-700 ${
-              isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
-            }`}
-          >
-            <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground mb-6">
-              <span className="w-8 h-px bg-foreground/30" />
-              Infrastructure
-            </span>
-            <h2 className="text-3xl lg:text-6xl font-display tracking-tight mb-6 lg:mb-8">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Left */}
+          <div className={`transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <span className="text-sm font-mono text-[#7c3aed] uppercase tracking-wider block mb-4">Infrastructure</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display tracking-tight text-gray-900 mb-6">
               Powerful voice
-              <br />
-              connectivity.
+              <span className="text-gray-400"> connectivity.</span>
             </h2>
-            <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed mb-8 lg:mb-12">
-              AI agents that connect with customers globally through reliable, 
-              high-quality voice interactions — powered by premium call infrastructure 
-              with sub-500ms latency across 100+ countries.
+            <p className="text-lg text-gray-600 leading-relaxed mb-10">
+              AI agents that connect with customers globally through reliable, high-quality voice interactions — powered by premium call infrastructure with sub-500ms latency across 100+ countries.
             </p>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 md:gap-8">
+            <div className="grid grid-cols-3 gap-6">
               <div>
-                <div className="text-2xl md:text-4xl lg:text-5xl font-display mb-1 md:mb-2">100+</div>
-                <div className="text-xs md:text-sm text-muted-foreground">Countries</div>
+                <div className="text-3xl md:text-4xl font-display text-[#7c3aed] mb-1">100+</div>
+                <div className="text-sm text-gray-500">Countries</div>
               </div>
               <div>
-                <div className="text-2xl md:text-4xl lg:text-5xl font-display mb-1 md:mb-2">99.99%</div>
-                <div className="text-xs md:text-sm text-muted-foreground">Uptime SLA</div>
+                <div className="text-3xl md:text-4xl font-display text-[#7c3aed] mb-1">99.99%</div>
+                <div className="text-sm text-gray-500">Uptime SLA</div>
               </div>
               <div>
-                <div className="text-2xl md:text-4xl lg:text-5xl font-display mb-1 md:mb-2">&lt;500ms</div>
-                <div className="text-xs md:text-sm text-muted-foreground">Call latency</div>
+                <div className="text-3xl md:text-4xl font-display text-[#7c3aed] mb-1">&lt;500ms</div>
+                <div className="text-sm text-gray-500">Call latency</div>
               </div>
             </div>
           </div>
 
-          {/* Right: Location list */}
-          <div
-            className={`transition-all duration-700 delay-200 ${
-              isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
-            }`}
-          >
-            <div className="border border-foreground/10">
-              {/* Header */}
-              <div className="px-4 md:px-6 py-3 md:py-4 border-b border-foreground/10 flex items-center justify-between">
-                <span className="text-xs md:text-sm font-mono text-muted-foreground">Edge Network</span>
-                <span className="flex items-center gap-2 text-xs font-mono text-green-600">
+          {/* Right */}
+          <div className={`transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700">Edge Network</span>
+                <span className="flex items-center gap-2 text-xs text-green-600 font-medium">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                   All operational
                 </span>
               </div>
-
-              {/* Locations */}
               <div>
                 {locations.map((location, index) => (
                   <div
                     key={location.city}
-                    className={`px-4 md:px-6 py-4 md:py-5 border-b border-foreground/5 last:border-b-0 flex items-center justify-between transition-all duration-300 ${
-                      activeLocation === index ? "bg-foreground/[0.02]" : ""
+                    className={`px-5 py-4 border-b border-gray-50 last:border-b-0 flex items-center justify-between transition-all duration-300 ${
+                      activeLocation === index ? "bg-[#7c3aed]/5" : ""
                     }`}
                   >
-                    <div className="flex items-center gap-3 md:gap-4">
-                      <span 
-                        className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                          activeLocation === index ? "bg-foreground" : "bg-foreground/20"
-                        }`}
-                      />
+                    <div className="flex items-center gap-3">
+                      <span className={`w-2 h-2 rounded-full transition-colors ${activeLocation === index ? "bg-[#7c3aed]" : "bg-gray-200"}`} />
                       <div>
-                        <div className="font-medium text-sm md:text-base">{location.city}</div>
-                        <div className="text-xs md:text-sm text-muted-foreground">{location.region}</div>
+                        <div className="text-sm font-medium text-gray-900">{location.city}</div>
+                        <div className="text-xs text-gray-400">{location.region}</div>
                       </div>
                     </div>
-                    <span className="font-mono text-xs md:text-sm text-muted-foreground">{location.latency}</span>
+                    <span className="font-mono text-sm text-gray-500">{location.latency}</span>
                   </div>
                 ))}
               </div>
