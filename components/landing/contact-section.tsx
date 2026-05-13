@@ -1,53 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-  MessageSquare,
-  Headphones,
-  Handshake,
-  ChevronDown,
-  ArrowUpRight,
-} from "lucide-react";
-import { AnimatedSphere } from "./animated-sphere";
+import { Mail, Phone, MapPin, Send, Check, ChevronDown } from "lucide-react";
 
 const messageTypes = [
   { value: "", label: "Select a topic" },
   { value: "general", label: "General Inquiry" },
   { value: "partnerships", label: "Partnerships" },
   { value: "press", label: "Press & Media" },
-  { value: "investors", label: "Investors" },
   { value: "sales", label: "Sales & Demos" },
   { value: "support", label: "Technical Support" },
   { value: "careers", label: "Careers" },
-];
-
-const contactCards = [
-  {
-    icon: MessageSquare,
-    title: "Talk to Sales",
-    description: "Get a personalized demo and learn how VoiceLabs AI can transform your workflow.",
-    cta: "Book a demo",
-    href: "/demo",
-  },
-  {
-    icon: Headphones,
-    title: "Get Support",
-    description: "Our team is here to help. Reach out for technical assistance or troubleshooting.",
-    cta: "Open a ticket",
-    href: "#",
-  },
-  {
-    icon: Handshake,
-    title: "Partnerships",
-    description: "Interested in partnering with us? Let's explore how we can grow together.",
-    cta: "Become a partner",
-    href: "#",
-  },
 ];
 
 const contactInfo = [
@@ -56,60 +19,22 @@ const contactInfo = [
   { icon: MapPin, label: "Office", value: "San Francisco, CA", href: "#" },
 ];
 
-const socialLinks = [
-  { name: "Twitter", href: "#" },
-  { name: "GitHub", href: "#" },
-  { name: "LinkedIn", href: "#" },
-  { name: "Discord", href: "#" },
-];
-
 const faqs = [
-  {
-    question: "How quickly do you respond?",
-    answer: "We typically respond within 24 hours on business days. Enterprise customers get priority support with a 4-hour SLA.",
-  },
-  {
-    question: "Do you offer a free trial?",
-    answer: "Yes! You can start with our free tier — no credit card required. Upgrade anytime as your needs grow.",
-  },
-  {
-    question: "Can I schedule a live demo?",
-    answer: "Absolutely. Use the 'Book a demo' option above or fill out the form and mention you'd like a walkthrough.",
-  },
-  {
-    question: "Where are you located?",
-    answer: "Our headquarters are in San Francisco, CA. We also have team members across the US and Europe.",
-  },
+  { question: "How quickly do you respond?", answer: "We typically respond within 24 hours on business days. Enterprise customers get priority support with a 4-hour SLA." },
+  { question: "Do you offer a free trial?", answer: "Yes! You can start with our free tier — no credit card required. Upgrade anytime as your needs grow." },
+  { question: "Can I schedule a live demo?", answer: "Absolutely. Visit our demo page or fill out the form and mention you'd like a walkthrough." },
+  { question: "Where are you located?", answer: "Our headquarters are in San Francisco, CA. We also have team members across the US and Europe." },
 ];
 
-function FAQItem({ question, answer, index, isVisible }: { question: string; answer: string; index: number; isVisible: boolean }) {
+function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
-
   return (
-    <div
-      className={`border-b border-gray-200 transition-all duration-700 ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-      }`}
-      style={{ transitionDelay: `${600 + index * 100}ms` }}
-    >
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between py-5 text-left group"
-      >
-        <span className="text-sm font-medium group-hover:text-gray-900/80 transition-colors">
-          {question}
-        </span>
-        <ChevronDown
-          className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
+    <div className="border-b border-gray-100">
+      <button onClick={() => setIsOpen(!isOpen)} className="w-full flex items-center justify-between py-4 text-left group">
+        <span className="text-sm font-medium text-gray-900 group-hover:text-[#7c3aed] transition-colors">{question}</span>
+        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
       </button>
-      <div
-        className={`overflow-hidden transition-all duration-300 ${
-          isOpen ? "max-h-40 pb-5" : "max-h-0"
-        }`}
-      >
+      <div className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-40 pb-4" : "max-h-0"}`}>
         <p className="text-sm text-gray-500 leading-relaxed">{answer}</p>
       </div>
     </div>
@@ -119,235 +44,107 @@ function FAQItem({ question, answer, index, isVisible }: { question: string; ans
 export function ContactSection() {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    messageType: "",
-    subject: "",
-    message: "",
-  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formState, setFormState] = useState({ name: "", email: "", messageType: "", subject: "", message: "" });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
       { threshold: 0.1 }
     );
-
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
+    setIsSubmitted(true);
   };
 
   return (
-    <section id="contact" ref={sectionRef} className="relative py-24 lg:py-32">
+    <section id="contact" ref={sectionRef} className="relative bg-white py-12 lg:py-20">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        {/* Section Header */}
-        <div
-          className={`mb-20 transition-all duration-1000 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-px bg-gray-900" />
-                <span className="text-sm font-mono text-gray-500 tracking-wider uppercase">
-                  Contact
-                </span>
-              </div>
-              <h2 className="text-3xl lg:text-6xl font-display tracking-tight mb-6 leading-[0.95]">
-                Let&apos;s start a
-                <br />
-                conversation
-              </h2>
-              <p className="text-lg text-gray-500 max-w-xl leading-relaxed">
-                Whether you have a question, need a demo, or want to explore a partnership — we&apos;d love to hear from you.
-              </p>
-            </div>
-            <div className="hidden lg:block">
-              <div className="aspect-square max-w-[400px] ml-auto">
-                <AnimatedSphere />
-              </div>
-            </div>
-          </div>
+        {/* Header */}
+        <div className={`mb-16 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+          <span className="text-sm font-mono text-[#7c3aed] uppercase tracking-wider block mb-4">Contact</span>
+          <h2 className="text-3xl lg:text-5xl font-display tracking-tight text-gray-900 mb-4">
+            Let&apos;s start a
+            <span className="text-gray-400"> conversation</span>
+          </h2>
+          <p className="text-lg text-gray-600 max-w-xl">
+            Whether you have a question, need a demo, or want to explore a partnership — we&apos;d love to hear from you.
+          </p>
         </div>
 
-        {/* Contact Cards — Option 2 & 3 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
-          {contactCards.map((card, i) => (
-            <a
-              key={card.title}
-              href={card.href}
-              className={`group relative border border-gray-200 rounded-2xl p-8 hover:border-gray-300 transition-all duration-700 hover:bg-gray-50 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-              style={{ transitionDelay: `${200 + i * 100}ms` }}
-            >
-              <card.icon className="w-6 h-6 mb-5 text-gray-500 group-hover:text-gray-900 transition-colors" />
-              <h3 className="text-lg font-medium mb-2">{card.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed mb-6">
-                {card.description}
-              </p>
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium group-hover:gap-2.5 transition-all">
-                {card.cta}
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </span>
-            </a>
-          ))}
-        </div>
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
+          {/* Form */}
+          <div className={`lg:col-span-3 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            {!isSubmitted ? (
+              <div className="border border-gray-200 rounded-2xl p-6 md:p-10">
+                <h3 className="text-xl font-display text-gray-900 mb-1">Send us a message</h3>
+                <p className="text-sm text-gray-500 mb-8">We&apos;ll get back to you within 24 hours.</p>
 
-        {/* Main Content: Form + Sidebar — Option 1 & 2 */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 lg:gap-20">
-          {/* Contact Form */}
-          <div
-            className={`lg:col-span-3 transition-all duration-1000 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-            style={{ transitionDelay: "400ms" }}
-          >
-            <h3 className="text-2xl font-display tracking-tight mb-2">Send us a message</h3>
-            <p className="text-sm text-gray-500 mb-8">
-              Fill out the form below and we&apos;ll get back to you within 24 hours.
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="contact-name" className="block text-sm font-medium mb-2">
-                    Name
-                  </label>
-                  <input
-                    id="contact-name"
-                    type="text"
-                    placeholder="Your name"
-                    value={formState.name}
-                    onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                    className="w-full h-12 px-4 bg-transparent border border-gray-900/15 rounded-xl text-sm placeholder:text-gray-500/50 focus:outline-none focus:border-gray-900/40 transition-colors"
-                  />
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">Name</label>
+                      <input type="text" placeholder="Your name" value={formState.name} onChange={(e) => setFormState({ ...formState, name: e.target.value })} className="w-full h-11 px-4 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#7c3aed] transition-colors" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+                      <input type="email" placeholder="you@company.com" value={formState.email} onChange={(e) => setFormState({ ...formState, email: e.target.value })} className="w-full h-11 px-4 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#7c3aed] transition-colors" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Topic</label>
+                    <div className="relative">
+                      <select value={formState.messageType} onChange={(e) => setFormState({ ...formState, messageType: e.target.value })} className="w-full h-11 px-4 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#7c3aed] transition-colors appearance-none cursor-pointer">
+                        {messageTypes.map((type) => (<option key={type.value} value={type.value}>{type.label}</option>))}
+                      </select>
+                      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Subject</label>
+                    <input type="text" placeholder="How can we help?" value={formState.subject} onChange={(e) => setFormState({ ...formState, subject: e.target.value })} className="w-full h-11 px-4 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#7c3aed] transition-colors" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Message</label>
+                    <textarea rows={4} placeholder="Tell us more..." value={formState.message} onChange={(e) => setFormState({ ...formState, message: e.target.value })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#7c3aed] transition-colors resize-none" />
+                  </div>
+                  <button type="submit" className="w-full h-12 bg-[#7c3aed] hover:bg-[#6d28d9] text-white rounded-full text-sm font-medium transition-colors inline-flex items-center justify-center gap-2 group">
+                    Send message
+                    <Send className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <div className="border border-gray-200 rounded-2xl p-6 md:p-10 flex flex-col items-center justify-center text-center min-h-[400px]">
+                <div className="w-16 h-16 rounded-full bg-[#7c3aed] flex items-center justify-center mb-6">
+                  <Check className="w-8 h-8 text-white" />
                 </div>
-                <div>
-                  <label htmlFor="contact-email" className="block text-sm font-medium mb-2">
-                    Email
-                  </label>
-                  <input
-                    id="contact-email"
-                    type="email"
-                    placeholder="you@company.com"
-                    value={formState.email}
-                    onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                    className="w-full h-12 px-4 bg-transparent border border-gray-900/15 rounded-xl text-sm placeholder:text-gray-500/50 focus:outline-none focus:border-gray-900/40 transition-colors"
-                  />
-                </div>
+                <h3 className="text-2xl font-display text-gray-900 mb-3">Message sent!</h3>
+                <p className="text-gray-500 max-w-sm">We&apos;ll get back to you within 24 hours.</p>
               </div>
-
-              <div>
-                <label htmlFor="contact-type" className="block text-sm font-medium mb-2">
-                  Message Type
-                </label>
-                <div className="relative">
-                  <select
-                    id="contact-type"
-                    value={formState.messageType}
-                    onChange={(e) => setFormState({ ...formState, messageType: e.target.value })}
-                    className="w-full h-12 px-4 bg-transparent border border-gray-900/15 rounded-xl text-sm focus:outline-none focus:border-gray-900/40 transition-colors appearance-none cursor-pointer"
-                  >
-                    {messageTypes.map((type) => (
-                      <option key={type.value} value={type.value}>
-                        {type.label}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="contact-subject" className="block text-sm font-medium mb-2">
-                  Subject
-                </label>
-                <input
-                  id="contact-subject"
-                  type="text"
-                  placeholder="How can we help?"
-                  value={formState.subject}
-                  onChange={(e) => setFormState({ ...formState, subject: e.target.value })}
-                  className="w-full h-12 px-4 bg-transparent border border-gray-900/15 rounded-xl text-sm placeholder:text-gray-500/50 focus:outline-none focus:border-gray-900/40 transition-colors"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="contact-message" className="block text-sm font-medium mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="contact-message"
-                  rows={5}
-                  placeholder="Tell us more about your project or question..."
-                  value={formState.message}
-                  onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                  className="w-full px-4 py-3 bg-transparent border border-gray-900/15 rounded-xl text-sm placeholder:text-gray-500/50 focus:outline-none focus:border-gray-900/40 transition-colors resize-none"
-                />
-              </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full sm:w-auto bg-gray-900 hover:bg-gray-900/90 text-background rounded-full px-8 h-12 text-sm group"
-              >
-                Send message
-                <Send className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Button>
-            </form>
+            )}
           </div>
 
-          {/* Sidebar: Info + FAQ — Option 1 & 2 */}
-          <div
-            className={`lg:col-span-2 transition-all duration-1000 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-            style={{ transitionDelay: "500ms" }}
-          >
+          {/* Sidebar */}
+          <div className={`lg:col-span-2 transition-all duration-1000 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             {/* Contact Info */}
-            <div className="mb-12">
-              <h3 className="text-lg font-medium mb-6">Get in touch</h3>
-              <div className="space-y-5">
+            <div className="mb-10">
+              <h3 className="text-base font-semibold text-gray-900 mb-5">Get in touch</h3>
+              <div className="space-y-4">
                 {contactInfo.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="flex items-start gap-4 group"
-                  >
-                    <div className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center shrink-0 group-hover:border-gray-300 transition-colors">
+                  <a key={item.label} href={item.href} className="flex items-start gap-3 group">
+                    <div className="w-9 h-9 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center shrink-0 group-hover:border-[#7c3aed]/30 transition-colors">
                       <item.icon className="w-4 h-4 text-gray-500" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 mb-0.5">{item.label}</p>
-                      <p className="text-sm font-medium group-hover:text-gray-900/80 transition-colors">
-                        {item.value}
-                      </p>
+                      <p className="text-xs text-gray-400">{item.label}</p>
+                      <p className="text-sm font-medium text-gray-700 group-hover:text-[#7c3aed] transition-colors">{item.value}</p>
                     </div>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Social Links */}
-            <div className="mb-12">
-              <h3 className="text-lg font-medium mb-4">Follow us</h3>
-              <div className="flex flex-wrap gap-3">
-                {socialLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    className="px-4 py-2 text-sm border border-gray-200 rounded-full text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-colors"
-                  >
-                    {link.name}
                   </a>
                 ))}
               </div>
@@ -355,16 +152,10 @@ export function ContactSection() {
 
             {/* FAQ */}
             <div>
-              <h3 className="text-lg font-medium mb-4">Frequently asked</h3>
+              <h3 className="text-base font-semibold text-gray-900 mb-4">Frequently asked</h3>
               <div>
-                {faqs.map((faq, i) => (
-                  <FAQItem
-                    key={faq.question}
-                    question={faq.question}
-                    answer={faq.answer}
-                    index={i}
-                    isVisible={isVisible}
-                  />
+                {faqs.map((faq) => (
+                  <FAQItem key={faq.question} question={faq.question} answer={faq.answer} />
                 ))}
               </div>
             </div>
