@@ -158,18 +158,18 @@ export function DevelopersSection() {
               <span className="w-8 h-px bg-foreground/30" />
               Use cases
             </span>
-            <h2 className="text-4xl lg:text-6xl font-display tracking-tight mb-8">
+            <h2 className="text-3xl lg:text-6xl font-display tracking-tight mb-6 lg:mb-8">
               See how teams
               <br />
               <span className="text-muted-foreground">drive growth.</span>
             </h2>
-            <p className="text-xl text-muted-foreground mb-12 leading-relaxed">
+            <p className="text-lg lg:text-xl text-muted-foreground mb-8 lg:mb-12 leading-relaxed">
               Global teams are using VoiceLabs to automate calls, qualify leads, 
               and boost customer satisfaction across every industry.
             </p>
             
             {/* Features */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {features.map((feature, index) => (
                 <div
                   key={feature.title}
@@ -193,13 +193,13 @@ export function DevelopersSection() {
           >
             <div className="border border-foreground/10">
               {/* Tabs */}
-              <div className="flex items-center border-b border-foreground/10">
+              <div className="flex items-center border-b border-foreground/10 overflow-x-auto scrollbar-hide">
                 {codeExamples.map((example, idx) => (
                   <button
                     key={example.label}
                     type="button"
                     onClick={() => setActiveTab(idx)}
-                    className={`px-6 py-4 text-sm font-mono transition-colors relative ${
+                    className={`px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-mono transition-colors relative whitespace-nowrap flex-shrink-0 ${
                       activeTab === idx
                         ? "text-foreground"
                         : "text-muted-foreground hover:text-foreground"
@@ -215,7 +215,7 @@ export function DevelopersSection() {
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="px-4 py-4 text-muted-foreground hover:text-foreground transition-colors"
+                  className="px-4 py-3 md:py-4 text-muted-foreground hover:text-foreground transition-colors flex-shrink-0"
                   aria-label="Copy code"
                 >
                   {copied ? (
@@ -227,7 +227,7 @@ export function DevelopersSection() {
               </div>
               
               {/* Code content */}
-              <div className="p-8 font-mono text-sm bg-foreground/[0.01] min-h-[220px]">
+              <div className="p-4 md:p-8 font-mono text-xs md:text-sm bg-foreground/[0.01] min-h-[200px] md:min-h-[220px] overflow-x-auto">
                 <pre className="text-foreground/80">
                   {codeExamples[activeTab].code.split('\n').map((line, lineIndex) => (
                     <div 
