@@ -1,373 +1,154 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const features = [
   {
-    number: "01",
     title: "Human-like Voice Agents",
-    description: "Create AI agents with natural speech, custom accents, and personality. Train them instantly with your data and deploy on a no-code platform.",
-    visual: "ai",
+    description:
+      "Create AI agents with natural speech, custom accents, and personality. Train them instantly with your data — no coding or ML expertise required.",
+    visual: "voice",
   },
   {
-    number: "02",
     title: "Inbound & Outbound Calls",
-    description: "Handle outbound sales calls, answer inbound support queries, and schedule appointments around the clock. Upload contacts, set a schedule, and go.",
-    visual: "deploy",
+    description:
+      "Handle outbound sales calls, answer inbound support queries, and schedule appointments around the clock. Upload contacts, set a schedule, and go.",
+    visual: "calls",
   },
   {
-    number: "03",
-    title: "Engage & Convert",
-    description: "Automate lead qualification and follow-ups, boost event attendance with AI invitations, and provide 24/7 customer support that never sleeps.",
-    visual: "collab",
+    title: "Omnichannel Engagement",
+    description:
+      "Connected journeys across Call, WhatsApp, SMS, and Email where every channel knows what happened on the last — no repetition, no lost context.",
+    visual: "omnichannel",
   },
   {
-    number: "04",
-    title: "Automate Tasks & Actions",
-    description: "Send SMS, emails, and WhatsApp messages during calls. Transfer to live agents, collect data via webhooks, and schedule appointments with calendar invites.",
-    visual: "security",
+    title: "Quality Monitoring",
+    description:
+      "AI + human quality audits across 23 parameters, so we catch what's breaking before it hits your numbers. Real-time scoring on every call.",
+    visual: "quality",
+  },
+  {
+    title: "ROI Optimizer",
+    description:
+      "Run controlled experiments on voice, prompt, channel sequence, and call timing, and compound the gains instead of guessing what worked.",
+    visual: "roi",
   },
 ];
 
-{/* 01 — Voice Waveform: pulsing audio wave representing human-like voice */}
-function AIVisual() {
-  return (
-    <svg viewBox="0 0 200 160" className="w-full h-full">
-      {/* Waveform bars */}
-      {[...Array(24)].map((_, i) => {
-        const x = 20 + i * 7;
-        const baseHeight = 8 + Math.sin(i * 0.6) * 20 + Math.cos(i * 0.9) * 15;
-        return (
-          <rect
-            key={i}
-            x={x}
-            y={80}
-            width="4"
-            rx="2"
-            fill="currentColor"
-            opacity="0.6"
-          >
-            <animate
-              attributeName="height"
-              values={`${baseHeight * 0.3};${baseHeight};${baseHeight * 0.5};${baseHeight * 0.8};${baseHeight * 0.3}`}
-              dur={`${1.5 + (i % 5) * 0.2}s`}
-              begin={`${i * 0.05}s`}
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="y"
-              values={`${80 - baseHeight * 0.15};${80 - baseHeight * 0.5};${80 - baseHeight * 0.25};${80 - baseHeight * 0.4};${80 - baseHeight * 0.15}`}
-              dur={`${1.5 + (i % 5) * 0.2}s`}
-              begin={`${i * 0.05}s`}
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="opacity"
-              values="0.3;0.8;0.5;0.7;0.3"
-              dur={`${1.5 + (i % 5) * 0.2}s`}
-              begin={`${i * 0.05}s`}
-              repeatCount="indefinite"
-            />
-          </rect>
-        );
-      })}
-      {/* Mic icon */}
-      <circle cx="100" cy="140" r="6" fill="currentColor" opacity="0.3">
-        <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2s" repeatCount="indefinite" />
-      </circle>
-    </svg>
-  );
-}
+const tabs = features.map((f) => f.title);
 
-{/* 02 — Phone with bidirectional arrows: inbound & outbound calls */}
-function DeployVisual() {
-  return (
-    <svg viewBox="0 0 200 160" className="w-full h-full">
-      {/* Phone body */}
-      <rect x="75" y="30" width="50" height="100" rx="8" fill="none" stroke="currentColor" strokeWidth="2" />
-      <rect x="80" y="45" width="40" height="65" rx="2" fill="currentColor" opacity="0.05" />
-      <circle cx="100" cy="122" r="4" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      {/* Screen notch */}
-      <rect x="90" y="34" width="20" height="4" rx="2" fill="currentColor" opacity="0.2" />
-
-      {/* Outbound arrow (going right) */}
-      <line x1="130" y1="60" x2="170" y2="60" stroke="currentColor" strokeWidth="2" opacity="0.5">
-        <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2s" repeatCount="indefinite" />
-      </line>
-      <polygon points="170,55 180,60 170,65" fill="currentColor" opacity="0.5">
-        <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2s" repeatCount="indefinite" />
-      </polygon>
-      <text x="175" y="52" fontSize="8" fontFamily="monospace" fill="currentColor" opacity="0.4">OUT</text>
-
-      {/* Inbound arrow (coming left) */}
-      <line x1="70" y1="90" x2="30" y2="90" stroke="currentColor" strokeWidth="2" opacity="0.5">
-        <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2s" begin="1s" repeatCount="indefinite" />
-      </line>
-      <polygon points="30,85 20,90 30,95" fill="currentColor" opacity="0.5">
-        <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2s" begin="1s" repeatCount="indefinite" />
-      </polygon>
-      <text x="15" y="82" fontSize="8" fontFamily="monospace" fill="currentColor" opacity="0.4">IN</text>
-
-      {/* Pulse rings around phone */}
-      <rect x="75" y="30" width="50" height="100" rx="8" fill="none" stroke="currentColor" strokeWidth="1" opacity="0">
-        <animate attributeName="x" values="75;65" dur="2s" repeatCount="indefinite" />
-        <animate attributeName="y" values="30;20" dur="2s" repeatCount="indefinite" />
-        <animate attributeName="width" values="50;70" dur="2s" repeatCount="indefinite" />
-        <animate attributeName="height" values="100;120" dur="2s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0.4;0" dur="2s" repeatCount="indefinite" />
-      </rect>
-    </svg>
-  );
-}
-
-{/* 03 — Conversion funnel: lead → qualified → converted */}
-function CollabVisual() {
-  return (
-    <svg viewBox="0 0 200 160" className="w-full h-full">
-      {/* Funnel shape */}
-      <path d="M 40 25 L 160 25 L 130 70 L 130 70" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.3" />
-      <path d="M 160 25 L 130 70 L 120 100" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.3" />
-      <path d="M 40 25 L 70 70 L 80 100" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.3" />
-      <line x1="70" y1="70" x2="130" y2="70" stroke="currentColor" strokeWidth="1" opacity="0.15" strokeDasharray="3 3" />
-      <line x1="80" y1="100" x2="120" y2="100" stroke="currentColor" strokeWidth="1" opacity="0.15" strokeDasharray="3 3" />
-
-      {/* Labels */}
-      <text x="100" y="18" textAnchor="middle" fontSize="7" fontFamily="monospace" fill="currentColor" opacity="0.4">LEADS</text>
-      <text x="145" y="68" fontSize="7" fontFamily="monospace" fill="currentColor" opacity="0.4">QUALIFIED</text>
-      <text x="138" y="98" fontSize="7" fontFamily="monospace" fill="currentColor" opacity="0.4">CONVERTED</text>
-
-      {/* Animated dots falling through funnel */}
-      {[0, 1, 2, 3, 4].map((i) => (
-        <circle key={i} r="3" fill="currentColor" opacity="0">
-          <animate
-            attributeName="cx"
-            values={`${60 + i * 20};${80 + i * 8};100`}
-            dur="3s"
-            begin={`${i * 0.6}s`}
-            repeatCount="indefinite"
-          />
-          <animate
-            attributeName="cy"
-            values="28;70;120"
-            dur="3s"
-            begin={`${i * 0.6}s`}
-            repeatCount="indefinite"
-          />
-          <animate
-            attributeName="opacity"
-            values="0;0.7;0.7;0"
-            dur="3s"
-            begin={`${i * 0.6}s`}
-            repeatCount="indefinite"
-          />
-          <animate
-            attributeName="r"
-            values="3;3;4"
-            dur="3s"
-            begin={`${i * 0.6}s`}
-            repeatCount="indefinite"
-          />
-        </circle>
-      ))}
-
-      {/* Checkmark at bottom */}
-      <g transform="translate(100, 135)">
-        <circle r="10" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.4">
-          <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite" />
-        </circle>
-        <path d="M -4 0 L -1 3 L 5 -3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.5">
-          <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite" />
-        </path>
-      </g>
-    </svg>
-  );
-}
-
-{/* 04 — Connected action grid: SMS, email, calendar, webhook */}
-function SecurityVisual() {
-  const nodes = [
-    { x: 55, y: 40, label: "SMS" },
-    { x: 145, y: 40, label: "Email" },
-    { x: 55, y: 110, label: "Cal" },
-    { x: 145, y: 110, label: "Hook" },
-  ];
-
-  return (
-    <svg viewBox="0 0 200 160" className="w-full h-full">
-      {/* Center hub */}
-      <circle cx="100" cy="75" r="14" fill="currentColor" opacity="0.1">
-        <animate attributeName="opacity" values="0.05;0.15;0.05" dur="3s" repeatCount="indefinite" />
-      </circle>
-      <circle cx="100" cy="75" r="14" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
-      <text x="100" y="78" textAnchor="middle" fontSize="8" fontFamily="monospace" fill="currentColor" opacity="0.6">AI</text>
-
-      {/* Connection lines from center to each node */}
-      {nodes.map((node, i) => (
-        <line
-          key={`line-${i}`}
-          x1="100"
-          y1="75"
-          x2={node.x}
-          y2={node.y}
-          stroke="currentColor"
-          strokeWidth="1"
-          strokeDasharray="4 3"
-          opacity="0.2"
-        >
-          <animate
-            attributeName="stroke-dashoffset"
-            values="0;-7"
-            dur="1s"
-            begin={`${i * 0.25}s`}
-            repeatCount="indefinite"
-          />
-          <animate
-            attributeName="opacity"
-            values="0.15;0.4;0.15"
-            dur="2s"
-            begin={`${i * 0.5}s`}
-            repeatCount="indefinite"
-          />
-        </line>
-      ))}
-
-      {/* Animated data packets traveling along lines */}
-      {nodes.map((node, i) => (
-        <circle key={`packet-${i}`} r="2.5" fill="currentColor" opacity="0">
-          <animate
-            attributeName="cx"
-            values={`100;${node.x}`}
-            dur="1.5s"
-            begin={`${i * 0.7}s`}
-            repeatCount="indefinite"
-          />
-          <animate
-            attributeName="cy"
-            values={`75;${node.y}`}
-            dur="1.5s"
-            begin={`${i * 0.7}s`}
-            repeatCount="indefinite"
-          />
-          <animate
-            attributeName="opacity"
-            values="0;0.8;0"
-            dur="1.5s"
-            begin={`${i * 0.7}s`}
-            repeatCount="indefinite"
-          />
-        </circle>
-      ))}
-
-      {/* Node boxes */}
-      {nodes.map((node, i) => (
-        <g key={`node-${i}`}>
-          <rect
-            x={node.x - 20}
-            y={node.y - 14}
-            width="40"
-            height="28"
-            rx="4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            opacity="0.3"
-          >
-            <animate
-              attributeName="opacity"
-              values="0.2;0.5;0.2"
-              dur="2.5s"
-              begin={`${i * 0.5}s`}
-              repeatCount="indefinite"
-            />
-          </rect>
-          <text
-            x={node.x}
-            y={node.y + 3}
-            textAnchor="middle"
-            fontSize="9"
-            fontFamily="monospace"
-            fill="currentColor"
-            opacity="0.5"
-          >
-            {node.label}
-          </text>
-        </g>
-      ))}
-    </svg>
-  );
-}
-
-function AnimatedVisual({ type }: { type: string }) {
+function FeatureVisual({ type }: { type: string }) {
   switch (type) {
-    case "deploy":
-      return <DeployVisual />;
-    case "ai":
-      return <AIVisual />;
-    case "collab":
-      return <CollabVisual />;
-    case "security":
-      return <SecurityVisual />;
-    default:
-      return <DeployVisual />;
-  }
-}
-
-function FeatureCard({ feature, index }: { feature: typeof features[0]; index: number }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.2 }
-    );
-
-    if (cardRef.current) observer.observe(cardRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={cardRef}
-      className={`group relative transition-all duration-700 ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-      }`}
-      style={{ transitionDelay: `${index * 100}ms` }}
-    >
-      <div className="flex flex-col lg:flex-row gap-6 lg:gap-16 py-8 lg:py-20 border-b border-foreground/10">
-        {/* Number */}
-        <div className="shrink-0">
-          <span className="font-mono text-sm text-muted-foreground">{feature.number}</span>
-        </div>
-        
-        {/* Content */}
-        <div className="flex-1 grid lg:grid-cols-2 gap-6 lg:gap-8 items-center">
-          <div>
-            <h3 className="text-2xl lg:text-4xl font-display mb-3 lg:mb-4 group-hover:translate-x-2 transition-transform duration-500">
-              {feature.title}
-            </h3>
-            <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">
-              {feature.description}
-            </p>
+    case "voice":
+      return (
+        <div className="w-full h-full bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl flex items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#7c3aed]/10 to-[#a78bfa]/20" />
+          <div className="relative flex items-center gap-1 h-16">
+            {[...Array(16)].map((_, i) => (
+              <div
+                key={i}
+                className="w-1 bg-[#7c3aed]/60 rounded-full"
+                style={{
+                  height: `${20 + Math.sin(i * 0.8) * 30 + 20}%`,
+                  animation: `pulse ${1.2 + (i % 4) * 0.2}s ease-in-out infinite alternate`,
+                  animationDelay: `${i * 60}ms`,
+                }}
+              />
+            ))}
           </div>
-          
-          {/* Visual */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="w-40 h-32 lg:w-48 lg:h-40 text-foreground">
-              <AnimatedVisual type={feature.visual} />
+          <div className="absolute bottom-4 right-4 px-3 py-1.5 bg-white rounded-lg shadow-sm text-xs text-gray-600 font-medium">
+            Optimized Call
+          </div>
+        </div>
+      );
+    case "calls":
+      return (
+        <div className="w-full h-full bg-gradient-to-br from-blue-50 to-purple-100 rounded-xl flex items-center justify-center relative overflow-hidden">
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
+                <div className="w-5 h-5 rounded-full bg-[#7c3aed]/40" />
+              </div>
+              <div className="w-12 h-[2px] bg-[#7c3aed]/30" />
+              <div className="w-10 h-10 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
+                <div className="w-5 h-5 rounded-full bg-[#7c3aed]/40" />
+              </div>
+            </div>
+            <div className="flex gap-2 mt-2">
+              <span className="px-2 py-1 bg-white rounded text-[10px] text-gray-500 shadow-sm">IN</span>
+              <span className="px-2 py-1 bg-[#7c3aed] rounded text-[10px] text-white shadow-sm">OUT</span>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      );
+    case "omnichannel":
+      return (
+        <div className="w-full h-full bg-gradient-to-br from-violet-50 to-pink-100 rounded-xl flex items-center justify-center relative overflow-hidden">
+          <div className="flex items-center gap-3">
+            {["📞", "💬", "✉️", "📱"].map((emoji, i) => (
+              <div
+                key={i}
+                className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-lg"
+                style={{ animationDelay: `${i * 100}ms` }}
+              >
+                {emoji}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    case "quality":
+      return (
+        <div className="w-full h-full bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl flex items-center justify-center relative overflow-hidden">
+          <div className="text-center">
+            <div className="w-20 h-20 rounded-full border-4 border-[#7c3aed]/30 flex items-center justify-center mx-auto mb-2">
+              <span className="text-2xl font-display text-[#7c3aed]">94%</span>
+            </div>
+            <div className="flex gap-3 mt-3">
+              <div className="text-center">
+                <div className="text-sm font-display text-gray-700">12,340</div>
+                <div className="text-[10px] text-gray-400">Passed</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm font-display text-gray-700">740</div>
+                <div className="text-[10px] text-gray-400">Flagged</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    case "roi":
+      return (
+        <div className="w-full h-full bg-gradient-to-br from-amber-50 to-orange-100 rounded-xl flex items-center justify-center relative overflow-hidden">
+          <div className="space-y-2 px-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono text-gray-500">A</span>
+              <div className="flex-1 h-2 bg-[#7c3aed]/20 rounded-full overflow-hidden">
+                <div className="h-full w-[62%] bg-[#7c3aed]/60 rounded-full" />
+              </div>
+              <span className="text-xs font-mono text-gray-600">12.4%</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono text-gray-500">B</span>
+              <div className="flex-1 h-2 bg-[#7c3aed]/20 rounded-full overflow-hidden">
+                <div className="h-full w-[81%] bg-[#7c3aed] rounded-full" />
+              </div>
+              <span className="text-xs font-mono text-gray-600">18.1%</span>
+            </div>
+          </div>
+        </div>
+      );
+    default:
+      return <div className="w-full h-full bg-gray-100 rounded-xl" />;
+  }
 }
 
 export function FeaturesSection() {
+  const [activeTab, setActiveTab] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -376,40 +157,115 @@ export function FeaturesSection() {
       },
       { threshold: 0.1 }
     );
-
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
+  const scrollCards = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = 320;
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <section
-      id="features"
-      ref={sectionRef}
-      className="relative py-24 lg:py-32"
-    >
+    <section id="features" ref={sectionRef} className="relative bg-white py-20 lg:py-32">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Header */}
-        <div className="mb-16 lg:mb-24">
-          <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground mb-6">
-            <span className="w-8 h-px bg-foreground/30" />
-            Capabilities
-          </span>
-          <h2
-            className={`text-3xl lg:text-6xl font-display tracking-tight transition-all duration-700 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
-            Build AI voice assistants
+        <div
+          className={`mb-12 lg:mb-16 transition-all duration-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display tracking-tight text-gray-900 max-w-2xl">
+            The Complete Voice AI Stack
             <br />
-            <span className="text-muted-foreground">that work for you 24/7.</span>
+            <span className="text-gray-400">for Your Business</span>
           </h2>
         </div>
 
-        {/* Features List */}
-        <div>
-          {features.map((feature, index) => (
-            <FeatureCard key={feature.number} feature={feature} index={index} />
-          ))}
+        {/* Tabs */}
+        <div
+          className={`mb-10 transition-all duration-1000 delay-200 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="flex items-center gap-4 overflow-x-auto scrollbar-hide pb-2">
+            {tabs.map((tab, i) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(i)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm whitespace-nowrap transition-all ${
+                  activeTab === i
+                    ? "bg-[#7c3aed] text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                {i > 0 && (
+                  <span className="hidden sm:inline-block w-4 h-px bg-current opacity-30 -ml-2 mr-0" />
+                )}
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Cards carousel */}
+        <div
+          className={`relative transition-all duration-1000 delay-300 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div
+            ref={scrollRef}
+            className="flex gap-5 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4"
+          >
+            {features.map((feature, i) => (
+              <div
+                key={feature.title}
+                className={`flex-shrink-0 w-[280px] md:w-[300px] snap-start transition-all duration-300 ${
+                  activeTab === i ? "ring-2 ring-[#7c3aed]/30 rounded-2xl" : ""
+                }`}
+                onClick={() => setActiveTab(i)}
+              >
+                {/* Visual */}
+                <div className="h-48 md:h-56 mb-4 cursor-pointer">
+                  <FeatureVisual type={feature.visual} />
+                </div>
+
+                {/* Content */}
+                <div className="px-1">
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Navigation arrows */}
+          <div className="flex items-center justify-center gap-3 mt-8">
+            <button
+              onClick={() => scrollCards("left")}
+              className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:border-[#7c3aed] hover:text-[#7c3aed] transition-colors"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => scrollCards("right")}
+              className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:border-[#7c3aed] hover:text-[#7c3aed] transition-colors"
+              aria-label="Next"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
     </section>
