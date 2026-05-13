@@ -42,42 +42,73 @@ export async function POST(request: Request) {
 
     // Send confirmation email
     await resend.emails.send({
-      from: "VoiceLabs AI <onboarding@resend.dev>",
+      from: "VoiceLabs <onboarding@resend.dev>",
       to: email,
-      subject: "You're on the VoiceLabs waitlist! 🎉",
+      subject: "Welcome to VoiceLabs — you're on the list",
       html: `
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 20px;">
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 24px; background: #ffffff;">
+          <!-- Logo -->
           <div style="margin-bottom: 32px;">
-            <span style="font-size: 24px; font-weight: 600; letter-spacing: -0.5px;">VoiceLabs</span>
-            <span style="font-size: 11px; color: #666; margin-left: 6px;">AI</span>
+            <img src="https://voicelabs-website.vercel.app/voicelabs-logo.png" alt="VoiceLabs" style="height: 40px; width: auto;" />
           </div>
           
-          <h1 style="font-size: 28px; font-weight: 600; margin-bottom: 16px; color: #111;">
-            You're on the list!
+          <!-- Headline -->
+          <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 24px; color: #111;">
+            You're officially on the VoiceLabs early access list
           </h1>
           
-          <p style="font-size: 16px; line-height: 1.6; color: #444; margin-bottom: 24px;">
-            Thanks for joining the VoiceLabs waitlist. We're building the next generation of AI voice agents and you'll be among the first to try it.
+          <!-- Body -->
+          <p style="font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 16px;">
+            Hey,
           </p>
           
-          <div style="background: #f8f8f8; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-            <p style="font-size: 14px; color: #666; margin: 0 0 8px 0; font-weight: 500;">What happens next:</p>
-            <ul style="font-size: 14px; line-height: 1.8; color: #444; padding-left: 20px; margin: 0;">
-              <li>We'll notify you as soon as early access opens</li>
-              <li>You'll get priority access before the public launch</li>
-              <li>Exclusive updates on features and progress</li>
-            </ul>
+          <p style="font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 16px;">
+            Thanks for joining the VoiceLabs early access list.
+          </p>
+          
+          <p style="font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 16px;">
+            We're building a platform that helps businesses use AI voice agents to handle repetitive conversations, answer customer questions, take orders, manage bookings, follow up with clients, and offer support 24/7.
+          </p>
+          
+          <p style="font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 16px;">
+            You'll be among the first people invited to test the platform when the early version is ready.
+          </p>
+          
+          <p style="font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 16px;">
+            Our goal is to build VoiceLabs around real business needs, so your feedback will help us improve the product, the agent flows, and the way businesses automate their voice conversations.
+          </p>
+          
+          <p style="font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 16px;">
+            We'll keep you updated with product progress, early access details, and the next steps for testing.
+          </p>
+          
+          <p style="font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 32px;">
+            Thanks for being part of the beginning.
+          </p>
+          
+          <!-- Signature -->
+          <div style="margin-bottom: 32px; padding-top: 16px; border-top: 1px solid #eee;">
+            <p style="font-size: 15px; color: #333; margin: 0 0 4px 0; font-weight: 600;">
+              Madalin Alexandru
+            </p>
+            <p style="font-size: 14px; color: #666; margin: 0;">
+              Founder, VoiceLabs
+            </p>
           </div>
           
-          <p style="font-size: 14px; line-height: 1.6; color: #666;">
-            In the meantime, feel free to reply to this email if you have any questions or want to share your use case — we'd love to hear from you.
-          </p>
+          <!-- Social Links -->
+          <div style="padding-top: 24px; border-top: 1px solid #eee; text-align: center;">
+            <p style="font-size: 12px; color: #999; margin: 0 0 12px 0;">Follow us</p>
+            <a href="https://facebook.com/voicelabs" style="display: inline-block; margin: 0 8px; color: #666; text-decoration: none; font-size: 13px;">Facebook</a>
+            <a href="https://instagram.com/voicelabs" style="display: inline-block; margin: 0 8px; color: #666; text-decoration: none; font-size: 13px;">Instagram</a>
+            <a href="https://tiktok.com/@voicelabs" style="display: inline-block; margin: 0 8px; color: #666; text-decoration: none; font-size: 13px;">TikTok</a>
+            <a href="https://linkedin.com/company/voicelabs" style="display: inline-block; margin: 0 8px; color: #666; text-decoration: none; font-size: 13px;">LinkedIn</a>
+          </div>
           
-          <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid #eee;">
-            <p style="font-size: 12px; color: #999; margin: 0;">
-              VoiceLabs AI · San Francisco, CA<br/>
-              You received this because you signed up for the waitlist.<br/>
-              <a href="#" style="color: #999;">Unsubscribe</a>
+          <!-- Footer -->
+          <div style="margin-top: 24px; text-align: center;">
+            <p style="font-size: 11px; color: #999; margin: 0;">
+              VoiceLabs · You received this because you signed up for early access.
             </p>
           </div>
         </div>
