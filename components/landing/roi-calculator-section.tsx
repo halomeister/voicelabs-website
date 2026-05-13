@@ -63,7 +63,7 @@ export function RoiCalculatorSection() {
           <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase block mb-6">
             ROI Calculator
           </span>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl tracking-tight text-foreground mb-6">
+          <h2 className="font-display text-3xl md:text-5xl lg:text-6xl tracking-tight text-foreground mb-6">
             See how much you
             <br />
             <span className="text-stroke">could save</span>

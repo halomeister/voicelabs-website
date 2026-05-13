@@ -161,7 +161,7 @@ export function ContactSection() {
                   Contact
                 </span>
               </div>
-              <h2 className="text-4xl lg:text-6xl font-display tracking-tight mb-6 leading-[0.95]">
+              <h2 className="text-3xl lg:text-6xl font-display tracking-tight mb-6 leading-[0.95]">
                 Let&apos;s start a
                 <br />
                 conversation
@@ -298,7 +298,7 @@ export function ContactSection() {
               <Button
                 type="submit"
                 size="lg"
-                className="bg-foreground hover:bg-foreground/90 text-background rounded-full px-8 h-12 text-sm group"
+                className="w-full sm:w-auto bg-foreground hover:bg-foreground/90 text-background rounded-full px-8 h-12 text-sm group"
               >
                 Send message
                 <Send className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

@@ -75,12 +75,12 @@ export function IntegrationsSection() {
             Integrations
             <span className="w-8 h-px bg-foreground/30" />
           </span>
-          <h2 className="text-4xl lg:text-6xl font-display tracking-tight mb-6">
+          <h2 className="text-3xl lg:text-6xl font-display tracking-tight mb-6">
             Connect to your
             <br />
             favorite tools.
           </h2>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-lg lg:text-xl text-muted-foreground">
             Upgrade your VoiceLabs experience with integrations to the tools you already use.
           </p>
         </div>

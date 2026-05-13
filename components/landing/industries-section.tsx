@@ -35,7 +35,7 @@ export function IndustriesSection() {
             </span>
           </div>
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-24">
-            <h2 className="text-4xl lg:text-6xl font-display tracking-tight leading-[0.95]">
+            <h2 className="text-3xl lg:text-6xl font-display tracking-tight leading-[0.95]">
               AI voice agents
               <br />
               for <span className="text-stroke">every</span>

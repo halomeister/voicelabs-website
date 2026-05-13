@@ -88,13 +88,13 @@ export function CtaSection() {
                   </span>
                 </div>
 
-                <h2 className="text-4xl lg:text-7xl font-display tracking-tight mb-8 leading-[0.95]">
+                <h2 className="text-3xl lg:text-7xl font-display tracking-tight mb-6 lg:mb-8 leading-[0.95]">
                   Be the first to
                   <br />
                   <span className="text-stroke">try it</span>
                 </h2>
 
-                <p className="text-xl text-muted-foreground mb-12 leading-relaxed max-w-xl">
+                <p className="text-lg lg:text-xl text-muted-foreground mb-8 lg:mb-12 leading-relaxed max-w-xl">
                   We&apos;re building the next generation of AI voice agents.
                   Join the waitlist and get early access when we launch.
                 </p>

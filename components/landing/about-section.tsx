@@ -102,7 +102,7 @@ export function AboutSection() {
             </span>
           </div>
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-24">
-            <h2 className="text-4xl lg:text-6xl font-display tracking-tight leading-[0.95]">
+            <h2 className="text-3xl lg:text-6xl font-display tracking-tight leading-[0.95]">
               We&apos;re building the
               <br />
               <span className="text-stroke">voice layer</span>
@@ -125,7 +125,7 @@ export function AboutSection() {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <p className="text-3xl lg:text-5xl font-display leading-snug max-w-4xl">
+          <p className="text-2xl lg:text-5xl font-display leading-snug max-w-4xl">
             &ldquo;Every business deserves an AI team member that never sleeps,
             never forgets, and always puts the customer first.&rdquo;
           </p>

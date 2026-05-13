@@ -58,12 +58,12 @@ export function SecuritySection() {
               <span className="w-8 h-px bg-foreground/30" />
               Technology
             </span>
-            <h2 className="text-4xl lg:text-6xl font-display tracking-tight mb-8">
+            <h2 className="text-3xl lg:text-6xl font-display tracking-tight mb-6 lg:mb-8">
               Exceptional
               <br />
               technology.
             </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed mb-12">
+            <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed mb-8 lg:mb-12">
               Put your calls on autopilot. Send SMS, emails, calendar invites automatically 
               while your AI agents handle conversations with human-like precision.
             </p>
