@@ -72,7 +72,7 @@ export function Navigation() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="#" className={`text-foreground/70 hover:text-foreground transition-all duration-500 relative z-10 ${isScrolled ? "text-xs" : "text-sm"}`}>
+            <a href="https://voicelabs-app.vercel.app/login" className={`text-foreground/70 hover:text-foreground transition-all duration-500 relative z-10 ${isScrolled ? "text-xs" : "text-sm"}`}>
               Log in
               <span className="absolute -top-2 -right-8 z-50 px-1.5 py-0.5 bg-white text-black text-[9px] font-mono rounded-full leading-none border border-foreground/10">soon</span>
             </a>
@@ -150,7 +150,10 @@ export function Navigation() {
             <Button 
               variant="outline" 
               className="flex-1 rounded-full h-14 text-base"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                window.location.href = "https://voicelabs-app.vercel.app/login";
+              }}
             >
               Log in
             </Button>
