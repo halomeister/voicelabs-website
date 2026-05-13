@@ -32,7 +32,7 @@ const contactCards = [
     title: "Talk to Sales",
     description: "Get a personalized demo and learn how VoiceLabs AI can transform your workflow.",
     cta: "Book a demo",
-    href: "#",
+    href: "/demo",
   },
   {
     icon: Headphones,

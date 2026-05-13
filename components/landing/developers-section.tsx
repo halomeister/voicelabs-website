@@ -261,7 +261,7 @@ export function DevelopersSection() {
                 View all use cases
               </a>
               <span className="text-foreground/20">|</span>
-              <a href="#" className="text-muted-foreground hover:text-foreground">
+              <a href="/demo" className="text-muted-foreground hover:text-foreground">
                 Book a demo
               </a>
             </div>

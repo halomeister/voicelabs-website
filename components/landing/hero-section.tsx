@@ -128,6 +128,7 @@ export function HeroSection() {
               size="lg" 
               variant="outline" 
               className="h-14 px-8 text-base rounded-full border-foreground/20 hover:bg-foreground/5 w-full sm:w-auto"
+              onClick={() => window.location.href = "/demo"}
             >
               Book a demo
             </Button>
