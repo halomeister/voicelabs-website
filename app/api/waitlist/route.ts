@@ -1,9 +1,6 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID;
-
 export async function POST(request: Request) {
   try {
     const { email } = await request.json();
@@ -15,18 +12,23 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!AUDIENCE_ID) {
-      console.error("RESEND_AUDIENCE_ID is not configured");
+    const apiKey = process.env.RESEND_API_KEY;
+    const audienceId = process.env.RESEND_AUDIENCE_ID;
+
+    if (!apiKey || !audienceId) {
+      console.error("Missing env vars:", { apiKey: !!apiKey, audienceId: !!audienceId });
       return NextResponse.json(
         { error: "Server configuration error" },
         { status: 500 }
       );
     }
 
+    const resend = new Resend(apiKey);
+
     // Add contact to the "Waitlist" audience
     const contactResult = await resend.contacts.create({
       email,
-      audienceId: AUDIENCE_ID,
+      audienceId: audienceId,
       unsubscribed: false,
     });
 
