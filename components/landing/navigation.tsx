@@ -12,7 +12,6 @@ const navItems = [
       { name: "Industries", href: "/industries" },
     ],
   },
-  { name: "Pricing", href: "#pricing" },
   {
     name: "Company",
     dropdown: [
@@ -21,6 +20,7 @@ const navItems = [
       { name: "Careers", href: "/careers" },
     ],
   },
+  { name: "Pricing", href: "#pricing" },
   { name: "Contact", href: "/contact" },
 ];
 
