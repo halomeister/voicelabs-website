@@ -4,7 +4,6 @@ import { VideoSection } from "@/components/landing/video-section";
 import { FeaturesSection } from "@/components/landing/features-section";
 import { HowItWorksSection } from "@/components/landing/how-it-works-section";
 import { InfrastructureSection } from "@/components/landing/infrastructure-section";
-import { MetricsSection } from "@/components/landing/metrics-section";
 import { IntegrationsSection } from "@/components/landing/integrations-section";
 import { SecuritySection } from "@/components/landing/security-section";
 import { DevelopersSection } from "@/components/landing/developers-section";
@@ -26,7 +25,6 @@ export default function Home() {
       <FeaturesSection />
       <HowItWorksSection />
       <InfrastructureSection />
-      <MetricsSection />
       <IntegrationsSection />
       <SecuritySection />
       <DevelopersSection />
