@@ -58,7 +58,8 @@ const horeca = agent.deploy({
   industry: 'HoReCa',
   language: 'English (US)',
   goal: 'manage_reservations',
-  actions: ['book_table', 'take_order']
+  actions: ['book_table',
+    'take_order']
 })
 // 300+ reservations/day`,
   },
@@ -191,7 +192,7 @@ export function DevelopersSection() {
               isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
             }`}
           >
-            <div className="border border-foreground/10">
+            <div className="border border-foreground/10 overflow-hidden rounded-sm">
               {/* Tabs */}
               <div className="flex items-center border-b border-foreground/10 overflow-x-auto scrollbar-hide">
                 {codeExamples.map((example, idx) => (
@@ -227,12 +228,12 @@ export function DevelopersSection() {
               </div>
               
               {/* Code content */}
-              <div className="p-4 md:p-8 font-mono text-xs md:text-sm bg-foreground/[0.01] min-h-[200px] md:min-h-[220px] overflow-x-auto">
-                <pre className="text-foreground/80">
+              <div className="p-4 md:p-8 font-mono text-[10px] sm:text-xs md:text-sm bg-foreground/[0.01] min-h-[200px] md:min-h-[220px]">
+                <pre className="text-foreground/80 overflow-x-auto">
                   {codeExamples[activeTab].code.split('\n').map((line, lineIndex) => (
                     <div 
                       key={`${activeTab}-${lineIndex}`} 
-                      className="leading-loose dev-code-line"
+                      className="leading-relaxed md:leading-loose dev-code-line whitespace-pre"
                       style={{ animationDelay: `${lineIndex * 80}ms` }}
                     >
                       <span className="inline-flex">
