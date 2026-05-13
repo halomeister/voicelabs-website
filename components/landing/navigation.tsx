@@ -20,6 +20,7 @@ const navItems = [
       { name: "Careers", href: "/careers" },
     ],
   },
+  { name: "Case Studies", href: "/case-studies" },
   { name: "Pricing", href: "#pricing" },
   { name: "Contact", href: "/contact" },
 ];
