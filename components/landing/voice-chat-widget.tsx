@@ -13,7 +13,7 @@ function VoiceWaveform({ active }: { active: boolean }) {
       {[...Array(20)].map((_, i) => (
         <div
           key={i}
-          className="w-[3px] rounded-full bg-foreground/70 transition-all duration-150"
+          className="w-[3px] rounded-full bg-[#7c3aed]/60 transition-all duration-150"
           style={{
             height: active ? undefined : "4px",
             animation: active
@@ -162,8 +162,8 @@ export function VoiceChatWidget() {
         onClick={() => setIsOpen(!isOpen)}
         className={`fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-5 py-3 rounded-full shadow-lg transition-all duration-300 group ${
           isOpen
-            ? "bg-foreground/10 backdrop-blur-xl border border-foreground/20 text-foreground"
-            : "bg-foreground text-background hover:bg-foreground/90"
+            ? "bg-white border border-gray-200 text-gray-700"
+            : "bg-[#7c3aed] text-white hover:bg-[#6d28d9]"
         }`}
         aria-label="Voice chat"
       >
@@ -189,22 +189,22 @@ export function VoiceChatWidget() {
             : "opacity-0 scale-95 translate-y-4 pointer-events-none"
         }`}
       >
-        <div className="bg-background/95 backdrop-blur-xl border border-foreground/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ height: "480px" }}>
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ height: "480px" }}>
           {/* Header */}
-          <div className="px-5 py-4 border-b border-foreground/10 flex items-center justify-between shrink-0">
+          <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-foreground/5 border border-foreground/10 flex items-center justify-center">
-                <Mic className="w-4 h-4 text-foreground/60" />
+              <div className="w-9 h-9 rounded-full bg-[#7c3aed]/10 flex items-center justify-center">
+                <Mic className="w-4 h-4 text-[#7c3aed]" />
               </div>
               <div>
-                <div className="text-sm font-medium">VoiceLabs AI</div>
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? "bg-green-500" : "bg-foreground/20"}`} />
+                <div className="text-sm font-medium text-gray-900">VoiceLabs AI</div>
+                <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                  <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? "bg-green-500" : "bg-gray-300"}`} />
                   {isConnected ? `Connected · ${formatTime(callDuration)}` : isLoading ? "Connecting..." : "Ready to connect"}
                 </div>
               </div>
             </div>
-            <button onClick={handleClose} className="text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={handleClose} className="text-gray-400 hover:text-gray-600 transition-colors">
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -213,12 +213,12 @@ export function VoiceChatWidget() {
           <div ref={messagesRef} className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
             {!isConnected && !isLoading && messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-foreground/5 border border-foreground/10 flex items-center justify-center">
-                  <Phone className="w-7 h-7 text-foreground/30" />
+                <div className="w-16 h-16 rounded-full bg-[#7c3aed]/10 flex items-center justify-center">
+                  <Phone className="w-7 h-7 text-[#7c3aed]/50" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium mb-1">Talk to VoiceLabs AI</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed max-w-[220px]">
+                  <p className="text-sm font-medium text-gray-900 mb-1">Talk to VoiceLabs AI</p>
+                  <p className="text-xs text-gray-500 leading-relaxed max-w-[220px]">
                     Ask about features, pricing, use cases, or anything about our platform.
                   </p>
                 </div>
@@ -227,10 +227,10 @@ export function VoiceChatWidget() {
 
             {isLoading && messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-foreground/5 border border-foreground/10 flex items-center justify-center animate-pulse">
-                  <Phone className="w-7 h-7 text-foreground/30" />
+                <div className="w-16 h-16 rounded-full bg-[#7c3aed]/10 flex items-center justify-center animate-pulse">
+                  <Phone className="w-7 h-7 text-[#7c3aed]/50" />
                 </div>
-                <p className="text-sm text-muted-foreground">Connecting...</p>
+                <p className="text-sm text-gray-500">Connecting...</p>
               </div>
             )}
 
@@ -242,8 +242,8 @@ export function VoiceChatWidget() {
                 <div
                   className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                     msg.role === "user"
-                      ? "bg-foreground text-background rounded-br-md"
-                      : "bg-foreground/5 border border-foreground/10 text-foreground rounded-bl-md"
+                      ? "bg-[#7c3aed] text-white rounded-br-md"
+                      : "bg-gray-100 text-gray-800 rounded-bl-md"
                   }`}
                 >
                   {msg.text}
@@ -253,7 +253,7 @@ export function VoiceChatWidget() {
           </div>
 
           {/* Waveform + Controls */}
-          <div className="border-t border-foreground/10 px-5 py-4 shrink-0">
+          <div className="border-t border-gray-100 px-5 py-4 shrink-0">
             {isConnected && (
               <div className="mb-4">
                 <VoiceWaveform active={isSpeaking} />
@@ -264,7 +264,7 @@ export function VoiceChatWidget() {
               {!isConnected && !isLoading ? (
                 <button
                   onClick={handleConnect}
-                  className="flex items-center gap-2 px-6 py-3 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors group"
+                  className="flex items-center gap-2 px-6 py-3 bg-[#7c3aed] text-white rounded-full text-sm font-medium hover:bg-[#6d28d9] transition-colors group"
                 >
                   <Phone className="w-4 h-4 group-hover:animate-pulse" />
                   Start conversation
@@ -272,9 +272,9 @@ export function VoiceChatWidget() {
               ) : isLoading ? (
                 <button
                   disabled
-                  className="flex items-center gap-2 px-6 py-3 bg-foreground/50 text-background rounded-full text-sm font-medium cursor-not-allowed"
+                  className="flex items-center gap-2 px-6 py-3 bg-[#7c3aed]/50 text-white rounded-full text-sm font-medium cursor-not-allowed"
                 >
-                  <div className="w-4 h-4 border-2 border-background/30 border-t-background rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   Connecting...
                 </button>
               ) : (
@@ -283,8 +283,8 @@ export function VoiceChatWidget() {
                     onClick={handleToggleMute}
                     className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
                       !isMuted
-                        ? "bg-foreground text-background scale-110"
-                        : "bg-foreground/5 border border-foreground/10 text-foreground hover:bg-foreground/10"
+                        ? "bg-[#7c3aed] text-white scale-110"
+                        : "bg-gray-100 border border-gray-200 text-gray-600 hover:bg-gray-200"
                     }`}
                     aria-label={isMuted ? "Unmute" : "Mute"}
                   >
@@ -293,7 +293,7 @@ export function VoiceChatWidget() {
 
                   <button
                     onClick={handleDisconnect}
-                    className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 hover:bg-red-500/20 transition-colors"
+                    className="w-12 h-12 rounded-full bg-red-50 border border-red-200 flex items-center justify-center text-red-500 hover:bg-red-100 transition-colors"
                     aria-label="End call"
                   >
                     <Phone className="w-5 h-5 rotate-[135deg]" />
@@ -302,7 +302,7 @@ export function VoiceChatWidget() {
               )}
             </div>
 
-            <p className="text-[10px] text-center text-muted-foreground/40 mt-3">
+            <p className="text-[10px] text-center text-gray-400 mt-3">
               Powered by VoiceLabs AI
             </p>
           </div>

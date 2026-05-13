@@ -29,8 +29,8 @@ export function IndustriesSection() {
           }`}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-px bg-foreground" />
-            <span className="text-sm font-mono text-muted-foreground tracking-wider uppercase">
+            <div className="w-8 h-px bg-gray-900" />
+            <span className="text-sm font-mono text-gray-500 tracking-wider uppercase">
               Industries
             </span>
           </div>
@@ -38,12 +38,12 @@ export function IndustriesSection() {
             <h2 className="text-3xl lg:text-6xl font-display tracking-tight leading-[0.95]">
               AI voice agents
               <br />
-              for <span className="text-stroke">every</span>
+              for <span className="text-[#7c3aed]">every</span>
               <br />
               industry
             </h2>
             <div className="flex flex-col justify-end">
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
+              <p className="text-lg text-gray-500 leading-relaxed max-w-lg">
                 From healthcare to hospitality, VoiceLabs powers voice automation
                 across 15+ industries. Find your sector and see how AI agents
                 transform your customer operations.
@@ -58,38 +58,38 @@ export function IndustriesSection() {
             <a
               key={industry.slug}
               href={`/industries/${industry.slug}`}
-              className={`group relative border border-foreground/10 rounded-2xl p-8 hover:border-foreground/30 transition-all duration-700 hover:bg-foreground/[0.02] hover-lift ${
+              className={`group relative border border-gray-200 rounded-2xl p-8 hover:border-gray-300 transition-all duration-700 hover:bg-gray-50 hover-lift ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
               style={{ transitionDelay: `${200 + i * 60}ms` }}
             >
               <div className="flex items-start justify-between mb-5">
-                <industry.icon className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors" />
-                <span className="font-mono text-xs text-muted-foreground">
+                <industry.icon className="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition-colors" />
+                <span className="font-mono text-xs text-gray-500">
                   {String(i + 1).padStart(2, "0")}
                 </span>
               </div>
-              <h3 className="text-lg font-medium mb-1 group-hover:text-foreground/80 transition-colors">
+              <h3 className="text-lg font-medium mb-1 group-hover:text-gray-900/80 transition-colors">
                 {industry.name}
               </h3>
-              <p className="text-xs text-muted-foreground mb-3">{industry.tagline}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-6 line-clamp-2">
+              <p className="text-xs text-gray-500 mb-3">{industry.tagline}</p>
+              <p className="text-sm text-gray-500 leading-relaxed mb-6 line-clamp-2">
                 {industry.description}
               </p>
 
               {/* Stats preview */}
-              <div className="flex gap-4 mb-6 pt-4 border-t border-foreground/5">
+              <div className="flex gap-4 mb-6 pt-4 border-t border-gray-900/5">
                 {industry.stats.slice(0, 2).map((stat) => (
                   <div key={stat.label}>
                     <span className="block text-base font-display">{stat.value}</span>
-                    <span className="text-[10px] text-muted-foreground leading-tight block">
+                    <span className="text-[10px] text-gray-500 leading-tight block">
                       {stat.label}
                     </span>
                   </div>
                 ))}
               </div>
 
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground group-hover:text-foreground group-hover:gap-2.5 transition-all">
+              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 group-hover:text-gray-900 group-hover:gap-2.5 transition-all">
                 Learn more
                 <ArrowRight className="w-3.5 h-3.5" />
               </span>

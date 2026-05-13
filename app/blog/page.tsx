@@ -6,7 +6,7 @@ import { BlogList } from "@/components/landing/blog-list";
 
 export default function BlogPage() {
   return (
-    <main className="relative min-h-screen overflow-x-hidden noise-overlay">
+    <main className="relative min-h-screen overflow-x-hidden bg-white">
       <Navigation />
       <div className="pt-32">
         <BlogList />

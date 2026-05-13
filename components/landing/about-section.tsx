@@ -96,8 +96,8 @@ export function AboutSection() {
           }`}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-px bg-foreground" />
-            <span className="text-sm font-mono text-muted-foreground tracking-wider uppercase">
+            <div className="w-8 h-px bg-gray-900" />
+            <span className="text-sm font-mono text-gray-500 tracking-wider uppercase">
               About Us
             </span>
           </div>
@@ -105,12 +105,12 @@ export function AboutSection() {
             <h2 className="text-3xl lg:text-6xl font-display tracking-tight leading-[0.95]">
               We&apos;re building the
               <br />
-              <span className="text-stroke">voice layer</span>
+              <span className="text-[#7c3aed]">voice layer</span>
               <br />
               for AI
             </h2>
             <div className="flex flex-col justify-end">
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
+              <p className="text-lg text-gray-500 leading-relaxed max-w-lg">
                 VoiceLabs started with a simple observation: businesses spend billions on phone calls,
                 but the technology behind them hasn&apos;t changed in decades. We&apos;re fixing that with
                 AI agents that actually understand, respond, and act — in real time.
@@ -121,7 +121,7 @@ export function AboutSection() {
 
         {/* Mission Statement */}
         <div
-          className={`mb-32 py-20 border-y border-foreground/10 transition-all duration-1000 delay-200 ${
+          className={`mb-32 py-20 border-y border-gray-200 transition-all duration-1000 delay-200 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -130,12 +130,12 @@ export function AboutSection() {
             never forgets, and always puts the customer first.&rdquo;
           </p>
           <div className="mt-8 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-sm font-medium">
+            <div className="w-12 h-12 rounded-full bg-[#7c3aed]/10 flex items-center justify-center text-sm font-medium">
               AN
             </div>
             <div>
               <p className="text-sm font-medium">Alex Novak</p>
-              <p className="text-xs text-muted-foreground">CEO & Co-founder</p>
+              <p className="text-xs text-gray-500">CEO & Co-founder</p>
             </div>
           </div>
         </div>
@@ -147,12 +147,12 @@ export function AboutSection() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase block mb-4">
+            <span className="font-mono text-xs tracking-widest text-gray-500 uppercase block mb-4">
               Our Values
             </span>
             <h3 className="text-3xl lg:text-4xl font-display">What drives us</h3>
           </div>
-          <div className="grid md:grid-cols-2 gap-px bg-foreground/10">
+          <div className="grid md:grid-cols-2 gap-px bg-gray-100">
             {values.map((value, i) => (
               <div
                 key={value.title}
@@ -161,11 +161,11 @@ export function AboutSection() {
                 }`}
                 style={{ transitionDelay: `${300 + i * 100}ms` }}
               >
-                <span className="font-mono text-xs text-muted-foreground">
+                <span className="font-mono text-xs text-gray-500">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h4 className="text-xl font-display mt-3 mb-3">{value.title}</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-gray-500 leading-relaxed">
                   {value.description}
                 </p>
               </div>
@@ -180,7 +180,7 @@ export function AboutSection() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase block mb-4">
+            <span className="font-mono text-xs tracking-widest text-gray-500 uppercase block mb-4">
               Our Journey
             </span>
             <h3 className="text-3xl lg:text-4xl font-display">Milestones</h3>
@@ -189,12 +189,12 @@ export function AboutSection() {
             {milestones.map((milestone, i) => (
               <div
                 key={`${milestone.year}-${i}`}
-                className={`flex gap-8 py-6 border-b border-foreground/10 transition-all duration-700 ${
+                className={`flex gap-8 py-6 border-b border-gray-200 transition-all duration-700 ${
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}
                 style={{ transitionDelay: `${400 + i * 80}ms` }}
               >
-                <span className="font-mono text-sm text-muted-foreground w-16 shrink-0 pt-0.5">
+                <span className="font-mono text-sm text-gray-500 w-16 shrink-0 pt-0.5">
                   {milestone.year}
                 </span>
                 <p className="text-base lg:text-lg">{milestone.event}</p>
@@ -210,7 +210,7 @@ export function AboutSection() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase block mb-4">
+            <span className="font-mono text-xs tracking-widest text-gray-500 uppercase block mb-4">
               The Team
             </span>
             <h3 className="text-3xl lg:text-4xl font-display">Meet the people behind VoiceLabs</h3>
@@ -219,17 +219,17 @@ export function AboutSection() {
             {teamMembers.map((member, i) => (
               <div
                 key={member.name}
-                className={`group border border-foreground/10 rounded-2xl p-8 hover:border-foreground/30 transition-all duration-700 hover:bg-foreground/[0.02] ${
+                className={`group border border-gray-200 rounded-2xl p-8 hover:border-gray-300 transition-all duration-700 hover:bg-gray-50 ${
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
                 style={{ transitionDelay: `${500 + i * 80}ms` }}
               >
-                <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center text-base font-medium mb-5">
+                <div className="w-14 h-14 rounded-full bg-[#7c3aed]/10 flex items-center justify-center text-base font-medium mb-5">
                   {member.initials}
                 </div>
                 <h4 className="text-lg font-medium mb-1">{member.name}</h4>
-                <p className="text-sm text-muted-foreground mb-3">{member.role}</p>
-                <p className="text-sm text-muted-foreground leading-relaxed">{member.bio}</p>
+                <p className="text-sm text-gray-500 mb-3">{member.role}</p>
+                <p className="text-sm text-gray-500 leading-relaxed">{member.bio}</p>
               </div>
             ))}
           </div>
@@ -237,17 +237,17 @@ export function AboutSection() {
 
         {/* CTA */}
         <div
-          className={`text-center py-20 border-t border-foreground/10 transition-all duration-1000 delay-300 ${
+          className={`text-center py-20 border-t border-gray-200 transition-all duration-1000 delay-300 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
           <h3 className="text-3xl lg:text-4xl font-display mb-4">Want to join us?</h3>
-          <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+          <p className="text-gray-500 mb-8 max-w-md mx-auto">
             We&apos;re always looking for talented people who want to shape the future of voice AI.
           </p>
           <a
             href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors group"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 text-background rounded-full text-sm font-medium hover:bg-gray-900/90 transition-colors group"
           >
             Get in touch
             <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

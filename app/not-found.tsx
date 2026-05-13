@@ -40,7 +40,7 @@ export default function NotFound() {
   }, [messageIndex]);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden noise-overlay">
+    <main className="relative min-h-screen overflow-x-hidden bg-white">
       <Navigation />
       <section className="relative min-h-[80vh] flex flex-col items-center justify-center px-6">
         {/* Decorative rings */}

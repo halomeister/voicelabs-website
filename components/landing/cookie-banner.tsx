@@ -40,9 +40,9 @@ export function CookieBanner() {
     <button
       onClick={() => setIsVisible(true)}
       aria-label="Cookie preferences"
-      className="fixed bottom-8 left-8 z-50 w-10 h-10 rounded-full bg-background border border-foreground/10 shadow-lg flex items-center justify-center hover:scale-110 transition-transform"
+      className="fixed bottom-8 left-8 z-50 w-10 h-10 rounded-full bg-background border border-gray-200 shadow-lg flex items-center justify-center hover:scale-110 transition-transform"
     >
-      <Cookie className="w-4 h-4 text-muted-foreground" />
+      <Cookie className="w-4 h-4 text-gray-500" />
     </button>
   );
 
@@ -52,16 +52,16 @@ export function CookieBanner() {
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
       }`}
     >
-      <div className="bg-background/95 backdrop-blur-xl border border-foreground/10 rounded-2xl shadow-2xl overflow-hidden">
+      <div className="bg-background/95 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="px-5 pt-5 pb-0 flex items-start justify-between">
           <div className="flex items-center gap-2.5">
-            <Cookie className="w-5 h-5 text-foreground/50" />
+            <Cookie className="w-5 h-5 text-gray-900/50" />
             <h3 className="text-sm font-medium">Cookie Preferences</h3>
           </div>
           <button
             onClick={handleEssentialOnly}
-            className="text-muted-foreground hover:text-foreground transition-colors p-1 -m-1"
+            className="text-gray-500 hover:text-gray-900 transition-colors p-1 -m-1"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
@@ -70,16 +70,16 @@ export function CookieBanner() {
 
         {/* Body */}
         <div className="px-5 py-4">
-          <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+          <p className="text-sm text-gray-500 leading-relaxed mb-4">
             We use cookies to enhance your browsing experience and analyze site traffic.{" "}
-            <a href="/cookies" className="underline underline-offset-2 hover:text-foreground transition-colors">
+            <a href="/cookies" className="underline underline-offset-2 hover:text-gray-900 transition-colors">
               Learn more
             </a>
           </p>
 
           {/* Preferences panel */}
           {showPreferences && (
-            <div className="space-y-3 mb-4 pt-3 border-t border-foreground/10">
+            <div className="space-y-3 mb-4 pt-3 border-t border-gray-200">
               {[
                 { key: "essential" as const, label: "Essential", desc: "Required for the site to function", locked: true },
                 { key: "analytics" as const, label: "Analytics", desc: "Help us understand site usage", locked: false },
@@ -88,7 +88,7 @@ export function CookieBanner() {
                 <div key={item.key} className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium">{item.label}</p>
-                    <p className="text-xs text-muted-foreground">{item.desc}</p>
+                    <p className="text-xs text-gray-500">{item.desc}</p>
                   </div>
                   <button
                     onClick={() => {
@@ -97,7 +97,7 @@ export function CookieBanner() {
                       }
                     }}
                     className={`relative w-10 h-5 rounded-full p-0.5 transition-colors ${
-                      preferences[item.key] ? "bg-foreground" : "bg-foreground/15"
+                      preferences[item.key] ? "bg-gray-900" : "bg-gray-900/15"
                     } ${item.locked ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
                     aria-label={`Toggle ${item.label}`}
                   >
@@ -105,7 +105,7 @@ export function CookieBanner() {
                       className={`w-4 h-4 rounded-full transition-transform duration-200 ${
                         preferences[item.key]
                           ? "translate-x-5 bg-background"
-                          : "translate-x-0 bg-foreground/40"
+                          : "translate-x-0 bg-gray-900/40"
                       }`}
                     />
                   </button>
@@ -119,7 +119,7 @@ export function CookieBanner() {
         <div className="px-5 pb-5 flex items-center gap-2">
           <button
             onClick={() => setShowPreferences(!showPreferences)}
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
+            className="text-xs text-gray-500 hover:text-gray-900 transition-colors underline underline-offset-2"
           >
             {showPreferences ? "Hide" : "Manage Preferences"}
           </button>
@@ -128,7 +128,7 @@ export function CookieBanner() {
             <Button
               size="sm"
               onClick={handleSavePreferences}
-              className="bg-foreground hover:bg-foreground/90 text-background rounded-full px-4 h-8 text-xs"
+              className="bg-gray-900 hover:bg-gray-900/90 text-background rounded-full px-4 h-8 text-xs"
             >
               Save Preferences
             </Button>
@@ -138,14 +138,14 @@ export function CookieBanner() {
                 size="sm"
                 variant="outline"
                 onClick={handleEssentialOnly}
-                className="rounded-full px-4 h-8 text-xs border-foreground/15"
+                className="rounded-full px-4 h-8 text-xs border-gray-900/15"
               >
                 Essential Only
               </Button>
               <Button
                 size="sm"
                 onClick={handleAcceptAll}
-                className="bg-foreground hover:bg-foreground/90 text-background rounded-full px-4 h-8 text-xs"
+                className="bg-gray-900 hover:bg-gray-900/90 text-background rounded-full px-4 h-8 text-xs"
               >
                 Accept All
               </Button>

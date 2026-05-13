@@ -6,7 +6,7 @@ import { CookieBanner } from "@/components/landing/cookie-banner";
 
 export default function ContactPage() {
   return (
-    <main className="relative min-h-screen overflow-x-hidden noise-overlay">
+    <main className="relative min-h-screen overflow-x-hidden bg-white">
       <Navigation />
       <div className="pt-32">
         <ContactSection />
