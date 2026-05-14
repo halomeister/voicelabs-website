@@ -94,6 +94,12 @@ export function FooterSection() {
             <p className="text-sm text-gray-500 leading-relaxed mb-6 max-w-xs">
               AI Voice Calling Agents platform. Automate calls, qualify leads, and boost customer satisfaction — 24/7.
             </p>
+            {/* Newsletter */}
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">Newsletter</h3>
+              <p className="text-xs text-gray-500 mb-3">Product updates and AI voice insights. No spam.</p>
+              <NewsletterForm />
+            </div>
             {/* Social links */}
             <div className="flex items-center gap-3">
               {socialLinks.map((link) => (
@@ -131,13 +137,6 @@ export function FooterSection() {
 
         {/* Bottom section */}
         <div className="mt-12 pt-8 border-t border-gray-200">
-          {/* Newsletter */}
-          <div className="mb-8">
-            <h3 className="text-sm font-semibold text-gray-900 mb-2">Subscribe to our newsletter</h3>
-            <p className="text-xs text-gray-500 mb-3">Get product updates, company news, and AI voice insights. No spam.</p>
-            <NewsletterForm />
-          </div>
-
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-xs text-gray-400">© 2025 — VoiceLabs AI. All rights reserved.</p>
             <p className="text-xs text-gray-400">hello@voicelabs.ai</p>
