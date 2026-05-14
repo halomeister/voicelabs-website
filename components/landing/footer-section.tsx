@@ -1,5 +1,58 @@
 "use client";
 
+import { useState } from "react";
+import { ArrowRight } from "lucide-react";
+
+function NewsletterForm() {
+  const [email, setEmail] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) setIsSubmitted(true);
+    } catch {
+      // silent fail
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isSubmitted) {
+    return <p className="text-xs text-[#7c3aed] font-medium">✓ Subscribed! We&apos;ll keep you updated.</p>;
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex gap-2 max-w-sm">
+      <input
+        type="email"
+        placeholder="your@email.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        disabled={isLoading}
+        className="flex-1 h-9 px-3 bg-white border border-gray-200 rounded-full text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#7c3aed] transition-colors disabled:opacity-50"
+      />
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="h-9 px-4 bg-[#7c3aed] hover:bg-[#6d28d9] text-white rounded-full text-xs font-medium transition-colors inline-flex items-center gap-1.5 disabled:opacity-50"
+      >
+        {isLoading ? "..." : "Subscribe"}
+        {!isLoading && <ArrowRight className="w-3 h-3" />}
+      </button>
+    </form>
+  );
+}
+
 const footerLinks = {
   Product: [
     { name: "Features", href: "#features" },
@@ -78,6 +131,13 @@ export function FooterSection() {
 
         {/* Bottom section */}
         <div className="mt-12 pt-8 border-t border-gray-200">
+          {/* Newsletter */}
+          <div className="mb-8">
+            <h3 className="text-sm font-semibold text-gray-900 mb-2">Subscribe to our newsletter</h3>
+            <p className="text-xs text-gray-500 mb-3">Get product updates, company news, and AI voice insights. No spam.</p>
+            <NewsletterForm />
+          </div>
+
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-xs text-gray-400">© 2025 — VoiceLabs AI. All rights reserved.</p>
             <p className="text-xs text-gray-400">hello@voicelabs.ai</p>
