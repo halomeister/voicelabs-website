@@ -42,9 +42,9 @@ export function DevelopersSection() {
   }, []);
 
   return (
-    <section id="developers" ref={sectionRef} className="relative bg-white py-20 lg:py-32">
+    <section id="developers" ref={sectionRef} className="relative bg-white py-20 lg:py-32 overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start min-w-0">
           {/* Left */}
           <div className={`transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             <span className="text-sm font-mono text-[#7c3aed] uppercase tracking-wider block mb-4">Use Cases</span>
@@ -66,7 +66,7 @@ export function DevelopersSection() {
           </div>
 
           {/* Right: Code */}
-          <div className={`transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+          <div className={`min-w-0 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
               {/* Tabs */}
               <div className="flex items-center border-b border-gray-100 overflow-x-auto scrollbar-hide">
@@ -89,8 +89,8 @@ export function DevelopersSection() {
               </div>
 
               {/* Code */}
-              <div className="bg-gray-900 p-6 min-h-[240px]">
-                <pre className="font-mono text-[11px] sm:text-xs md:text-sm text-white/80 leading-relaxed overflow-x-auto">
+              <div className="bg-gray-900 p-4 md:p-6 min-h-[220px] md:min-h-[240px] overflow-hidden">
+                <pre className="font-mono text-[10px] sm:text-xs md:text-sm text-white/80 leading-relaxed overflow-x-auto">
                   {codeExamples[activeTab].code.split('\n').map((line, i) => (
                     <div key={`${activeTab}-${i}`}>
                       <span className="text-white/20 select-none inline-block w-5 mr-3">{i + 1}</span>
