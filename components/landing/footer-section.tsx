@@ -64,6 +64,7 @@ const footerLinks = {
     { name: "Careers", href: "/careers" },
     { name: "Blog", href: "/blog" },
     { name: "Case Studies", href: "/case-studies" },
+    { name: "Roadmap", href: "/roadmap" },
     { name: "Pricing", href: "#pricing" },
   ],
   Legal: [
