@@ -170,7 +170,11 @@ export function VoiceChatWidget() {
         };
 
         source.connect(processor);
-        processor.connect(audioContext.destination);
+        // Connect to a silent destination (required for ScriptProcessor to work, but don't output mic audio)
+        const silentGain = audioContext.createGain();
+        silentGain.gain.value = 0;
+        processor.connect(silentGain);
+        silentGain.connect(audioContext.destination);
       };
 
       ws.onmessage = (event) => {
