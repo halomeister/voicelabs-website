@@ -47,6 +47,7 @@ export function VoiceChatWidget() {
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const playbackQueueRef = useRef<ArrayBuffer[]>([]);
   const isPlayingRef = useRef(false);
+  const isSpeakingRef = useRef(false);
 
   // Listen for mobile menu toggle
   useEffect(() => {
@@ -108,11 +109,13 @@ export function VoiceChatWidget() {
     source.onended = () => {
       if (ctx.currentTime >= nextPlayTimeRef.current - 0.05) {
         setIsSpeaking(false);
+        isSpeakingRef.current = false;
       }
     };
 
     isPlayingRef.current = true;
     setIsSpeaking(true);
+    isSpeakingRef.current = true;
   }, []);
 
   const floatTo16BitPCM = (float32Array: Float32Array): ArrayBuffer => {
@@ -165,7 +168,7 @@ export function VoiceChatWidget() {
         processorRef.current = processor;
 
         processor.onaudioprocess = (e) => {
-          if (ws.readyState === WebSocket.OPEN && !isMuted) {
+          if (ws.readyState === WebSocket.OPEN && !isMuted && !isSpeakingRef.current) {
             const inputData = e.inputBuffer.getChannelData(0);
             const pcm = floatTo16BitPCM(inputData);
             const base64 = arrayBufferToBase64(pcm);
@@ -204,6 +207,7 @@ export function VoiceChatWidget() {
         } else if (msg.type === "agent_response") {
           setMessages((prev) => [...prev, { role: "agent", text: msg.agent_response_event.agent_response }]);
           setIsSpeaking(true);
+          isSpeakingRef.current = true;
         } else if (msg.type === "user_transcript") {
           setMessages((prev) => [...prev, { role: "user", text: msg.user_transcription_event.user_transcript }]);
         } else if (msg.type === "ping") {
@@ -217,6 +221,7 @@ export function VoiceChatWidget() {
         } else if (msg.type === "interruption") {
           // Agent was interrupted
           setIsSpeaking(false);
+          isSpeakingRef.current = false;
           playbackQueueRef.current = [];
           isPlayingRef.current = false;
           nextPlayTimeRef.current = 0;
