@@ -79,8 +79,12 @@ export function VoiceChatWidget() {
     }
   }, [messages]);
 
+  const nextPlayTimeRef = useRef(0);
+
   const playPCMAudio = useCallback((pcmData: ArrayBuffer) => {
     if (!audioContextRef.current) return;
+
+    const ctx = audioContextRef.current;
 
     // Convert PCM 16-bit signed LE to Float32
     const int16Array = new Int16Array(pcmData);
@@ -89,22 +93,24 @@ export function VoiceChatWidget() {
       float32Array[i] = int16Array[i] / 32768;
     }
 
-    const audioBuffer = audioContextRef.current.createBuffer(1, float32Array.length, 16000);
+    const audioBuffer = ctx.createBuffer(1, float32Array.length, 16000);
     audioBuffer.getChannelData(0).set(float32Array);
 
-    playbackQueueRef.current.push(pcmData);
-
-    const source = audioContextRef.current.createBufferSource();
+    const source = ctx.createBufferSource();
     source.buffer = audioBuffer;
-    source.connect(audioContextRef.current.destination);
+    source.connect(ctx.destination);
+
+    // Schedule chunks sequentially so they don't overlap
+    const startTime = Math.max(ctx.currentTime, nextPlayTimeRef.current);
+    source.start(startTime);
+    nextPlayTimeRef.current = startTime + audioBuffer.duration;
+
     source.onended = () => {
-      playbackQueueRef.current.shift();
-      if (playbackQueueRef.current.length === 0) {
-        isPlayingRef.current = false;
+      if (ctx.currentTime >= nextPlayTimeRef.current - 0.05) {
         setIsSpeaking(false);
       }
     };
-    source.start();
+
     isPlayingRef.current = true;
     setIsSpeaking(true);
   }, []);
@@ -213,6 +219,7 @@ export function VoiceChatWidget() {
           setIsSpeaking(false);
           playbackQueueRef.current = [];
           isPlayingRef.current = false;
+          nextPlayTimeRef.current = 0;
         }
       };
 
@@ -254,6 +261,7 @@ export function VoiceChatWidget() {
     }
     playbackQueueRef.current = [];
     isPlayingRef.current = false;
+    nextPlayTimeRef.current = 0;
   };
 
   const handleDisconnect = useCallback(() => {
