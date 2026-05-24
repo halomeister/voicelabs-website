@@ -79,43 +79,35 @@ export function VoiceChatWidget() {
     }
   }, [messages]);
 
-  const playAudioChunk = useCallback(async (audioData: ArrayBuffer) => {
+  const playPCMAudio = useCallback((pcmData: ArrayBuffer) => {
     if (!audioContextRef.current) return;
-    try {
-      const audioBuffer = await audioContextRef.current.decodeAudioData(audioData.slice(0));
-      const source = audioContextRef.current.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(audioContextRef.current.destination);
-      source.onended = () => {
-        playbackQueueRef.current.shift();
-        if (playbackQueueRef.current.length > 0) {
-          playAudioChunk(playbackQueueRef.current[0]);
-        } else {
-          isPlayingRef.current = false;
-          setIsSpeaking(false);
-        }
-      };
-      source.start();
-      setIsSpeaking(true);
-    } catch (e) {
-      // Skip undecodable chunks
+
+    // Convert PCM 16-bit signed LE to Float32
+    const int16Array = new Int16Array(pcmData);
+    const float32Array = new Float32Array(int16Array.length);
+    for (let i = 0; i < int16Array.length; i++) {
+      float32Array[i] = int16Array[i] / 32768;
+    }
+
+    const audioBuffer = audioContextRef.current.createBuffer(1, float32Array.length, 16000);
+    audioBuffer.getChannelData(0).set(float32Array);
+
+    playbackQueueRef.current.push(pcmData);
+
+    const source = audioContextRef.current.createBufferSource();
+    source.buffer = audioBuffer;
+    source.connect(audioContextRef.current.destination);
+    source.onended = () => {
       playbackQueueRef.current.shift();
-      if (playbackQueueRef.current.length > 0) {
-        playAudioChunk(playbackQueueRef.current[0]);
-      } else {
+      if (playbackQueueRef.current.length === 0) {
         isPlayingRef.current = false;
         setIsSpeaking(false);
       }
-    }
+    };
+    source.start();
+    isPlayingRef.current = true;
+    setIsSpeaking(true);
   }, []);
-
-  const queueAudio = useCallback((audioData: ArrayBuffer) => {
-    playbackQueueRef.current.push(audioData);
-    if (!isPlayingRef.current) {
-      isPlayingRef.current = true;
-      playAudioChunk(playbackQueueRef.current[0]);
-    }
-  }, [playAudioChunk]);
 
   const floatTo16BitPCM = (float32Array: Float32Array): ArrayBuffer => {
     const buffer = new ArrayBuffer(float32Array.length * 2);
@@ -151,20 +143,9 @@ export function VoiceChatWidget() {
       const audioContext = new AudioContext({ sampleRate: 16000 });
       audioContextRef.current = audioContext;
 
-      // Get signed URL from ElevenLabs
-      const response = await fetch(
-        `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${ELEVENLABS_AGENT_ID}`
-      );
-      
-      if (!response.ok) {
-        throw new Error("Failed to get signed URL");
-      }
-      
-      const data = await response.json();
-      const signedUrl = data.signed_url;
-
-      // Connect WebSocket
-      const ws = new WebSocket(signedUrl);
+      // Connect directly to ElevenLabs WebSocket with agent_id
+      const wsUrl = `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${ELEVENLABS_AGENT_ID}`;
+      const ws = new WebSocket(wsUrl);
       wsRef.current = ws;
 
       ws.onopen = () => {
@@ -195,18 +176,39 @@ export function VoiceChatWidget() {
       ws.onmessage = (event) => {
         const msg = JSON.parse(event.data);
 
-        if (msg.type === "audio") {
-          // Decode base64 audio and play
-          const binaryString = atob(msg.audio_event.audio_base_64);
-          const bytes = new Uint8Array(binaryString.length);
-          for (let i = 0; i < binaryString.length; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
+        if (msg.type === "conversation_initiation_metadata") {
+          // Connection confirmed, conversation started
+          console.log("Conversation started:", msg.conversation_initiation_metadata_event?.conversation_id);
+        } else if (msg.type === "audio") {
+          // Decode base64 PCM audio and play
+          const base64Audio = msg.audio_event?.audio_base_64;
+          if (base64Audio) {
+            const binaryString = atob(base64Audio);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            // Convert PCM 16-bit to AudioBuffer and play
+            playPCMAudio(bytes.buffer);
           }
-          queueAudio(bytes.buffer);
         } else if (msg.type === "agent_response") {
           setMessages((prev) => [...prev, { role: "agent", text: msg.agent_response_event.agent_response }]);
+          setIsSpeaking(true);
         } else if (msg.type === "user_transcript") {
           setMessages((prev) => [...prev, { role: "user", text: msg.user_transcription_event.user_transcript }]);
+        } else if (msg.type === "ping") {
+          // Respond to ping with pong to keep connection alive
+          if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({
+              type: "pong",
+              event_id: msg.ping_event?.event_id,
+            }));
+          }
+        } else if (msg.type === "interruption") {
+          // Agent was interrupted
+          setIsSpeaking(false);
+          playbackQueueRef.current = [];
+          isPlayingRef.current = false;
         }
       };
 
@@ -227,7 +229,7 @@ export function VoiceChatWidget() {
       setIsLoading(false);
       cleanup();
     }
-  }, [isMuted, queueAudio]);
+  }, [isMuted, playPCMAudio]);
 
   const cleanup = () => {
     if (processorRef.current) {
