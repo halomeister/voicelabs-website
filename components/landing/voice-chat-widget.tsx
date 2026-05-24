@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Mic, MicOff, X, Phone } from "lucide-react";
-import Vapi from "@vapi-ai/web";
 
-const VAPI_PUBLIC_KEY = "9c7f5219-676b-4894-a13f-f5752199c0db";
-const VAPI_ASSISTANT_ID = "2c9e42c3-3692-489a-b15c-6ceda8483433";
+const ELEVENLABS_AGENT_ID = "agent_2901k1gyjz6sef9v3fdn4gjgkrv5";
 
 function VoiceWaveform({ active }: { active: boolean }) {
   return (
@@ -42,50 +40,13 @@ export function VoiceChatWidget() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const messagesRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const vapiRef = useRef<Vapi | null>(null);
-
-  // Initialize Vapi
-  useEffect(() => {
-    const vapi = new Vapi(VAPI_PUBLIC_KEY);
-    vapiRef.current = vapi;
-
-    vapi.on("call-start", () => {
-      setIsConnected(true);
-      setIsLoading(false);
-    });
-
-    vapi.on("call-end", () => {
-      setIsConnected(false);
-      setIsLoading(false);
-      setIsSpeaking(false);
-    });
-
-    vapi.on("speech-start", () => {
-      setIsSpeaking(true);
-    });
-
-    vapi.on("speech-end", () => {
-      setIsSpeaking(false);
-    });
-
-    vapi.on("message", (msg) => {
-      if (msg.type === "transcript" && msg.transcriptType === "final") {
-        setMessages((prev) => [
-          ...prev,
-          { role: msg.role === "assistant" ? "agent" : "user", text: msg.transcript },
-        ]);
-      }
-    });
-
-    vapi.on("error", (error) => {
-      console.error("Vapi error:", error);
-      setIsLoading(false);
-    });
-
-    return () => {
-      vapi.stop();
-    };
-  }, []);
+  const wsRef = useRef<WebSocket | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const processorRef = useRef<ScriptProcessorNode | null>(null);
+  const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
+  const playbackQueueRef = useRef<ArrayBuffer[]>([]);
+  const isPlayingRef = useRef(false);
 
   // Listen for mobile menu toggle
   useEffect(() => {
@@ -118,30 +79,189 @@ export function VoiceChatWidget() {
     }
   }, [messages]);
 
-  const handleConnect = async () => {
-    if (!vapiRef.current) return;
+  const playAudioChunk = useCallback(async (audioData: ArrayBuffer) => {
+    if (!audioContextRef.current) return;
+    try {
+      const audioBuffer = await audioContextRef.current.decodeAudioData(audioData.slice(0));
+      const source = audioContextRef.current.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioContextRef.current.destination);
+      source.onended = () => {
+        playbackQueueRef.current.shift();
+        if (playbackQueueRef.current.length > 0) {
+          playAudioChunk(playbackQueueRef.current[0]);
+        } else {
+          isPlayingRef.current = false;
+          setIsSpeaking(false);
+        }
+      };
+      source.start();
+      setIsSpeaking(true);
+    } catch (e) {
+      // Skip undecodable chunks
+      playbackQueueRef.current.shift();
+      if (playbackQueueRef.current.length > 0) {
+        playAudioChunk(playbackQueueRef.current[0]);
+      } else {
+        isPlayingRef.current = false;
+        setIsSpeaking(false);
+      }
+    }
+  }, []);
+
+  const queueAudio = useCallback((audioData: ArrayBuffer) => {
+    playbackQueueRef.current.push(audioData);
+    if (!isPlayingRef.current) {
+      isPlayingRef.current = true;
+      playAudioChunk(playbackQueueRef.current[0]);
+    }
+  }, [playAudioChunk]);
+
+  const floatTo16BitPCM = (float32Array: Float32Array): ArrayBuffer => {
+    const buffer = new ArrayBuffer(float32Array.length * 2);
+    const view = new DataView(buffer);
+    for (let i = 0; i < float32Array.length; i++) {
+      const s = Math.max(-1, Math.min(1, float32Array[i]));
+      view.setInt16(i * 2, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+    }
+    return buffer;
+  };
+
+  const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
+    const bytes = new Uint8Array(buffer);
+    let binary = "";
+    for (let i = 0; i < bytes.byteLength; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  };
+
+  const handleConnect = useCallback(async () => {
     setIsLoading(true);
     setMessages([]);
+    playbackQueueRef.current = [];
+    isPlayingRef.current = false;
+
     try {
-      await vapiRef.current.start(VAPI_ASSISTANT_ID);
+      // Get microphone access
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
+
+      // Create audio context
+      const audioContext = new AudioContext({ sampleRate: 16000 });
+      audioContextRef.current = audioContext;
+
+      // Get signed URL from ElevenLabs
+      const response = await fetch(
+        `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${ELEVENLABS_AGENT_ID}`
+      );
+      
+      if (!response.ok) {
+        throw new Error("Failed to get signed URL");
+      }
+      
+      const data = await response.json();
+      const signedUrl = data.signed_url;
+
+      // Connect WebSocket
+      const ws = new WebSocket(signedUrl);
+      wsRef.current = ws;
+
+      ws.onopen = () => {
+        setIsConnected(true);
+        setIsLoading(false);
+
+        // Start sending audio
+        const source = audioContext.createMediaStreamSource(stream);
+        sourceRef.current = source;
+        const processor = audioContext.createScriptProcessor(4096, 1, 1);
+        processorRef.current = processor;
+
+        processor.onaudioprocess = (e) => {
+          if (ws.readyState === WebSocket.OPEN && !isMuted) {
+            const inputData = e.inputBuffer.getChannelData(0);
+            const pcm = floatTo16BitPCM(inputData);
+            const base64 = arrayBufferToBase64(pcm);
+            ws.send(JSON.stringify({
+              user_audio_chunk: base64,
+            }));
+          }
+        };
+
+        source.connect(processor);
+        processor.connect(audioContext.destination);
+      };
+
+      ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+
+        if (msg.type === "audio") {
+          // Decode base64 audio and play
+          const binaryString = atob(msg.audio_event.audio_base_64);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          queueAudio(bytes.buffer);
+        } else if (msg.type === "agent_response") {
+          setMessages((prev) => [...prev, { role: "agent", text: msg.agent_response_event.agent_response }]);
+        } else if (msg.type === "user_transcript") {
+          setMessages((prev) => [...prev, { role: "user", text: msg.user_transcription_event.user_transcript }]);
+        }
+      };
+
+      ws.onclose = () => {
+        setIsConnected(false);
+        setIsLoading(false);
+        setIsSpeaking(false);
+        cleanup();
+      };
+
+      ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+        setIsLoading(false);
+        cleanup();
+      };
     } catch (error) {
-      console.error("Failed to start call:", error);
+      console.error("Failed to start conversation:", error);
       setIsLoading(false);
+      cleanup();
     }
+  }, [isMuted, queueAudio]);
+
+  const cleanup = () => {
+    if (processorRef.current) {
+      processorRef.current.disconnect();
+      processorRef.current = null;
+    }
+    if (sourceRef.current) {
+      sourceRef.current.disconnect();
+      sourceRef.current = null;
+    }
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+      mediaStreamRef.current = null;
+    }
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
+    playbackQueueRef.current = [];
+    isPlayingRef.current = false;
   };
 
-  const handleDisconnect = () => {
-    if (!vapiRef.current) return;
-    vapiRef.current.stop();
+  const handleDisconnect = useCallback(() => {
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
     setIsConnected(false);
     setIsSpeaking(false);
-  };
+    cleanup();
+  }, []);
 
   const handleToggleMute = () => {
-    if (!vapiRef.current) return;
-    const newMuted = !isMuted;
-    vapiRef.current.setMuted(newMuted);
-    setIsMuted(newMuted);
+    setIsMuted((prev) => !prev);
   };
 
   const handleClose = () => {
